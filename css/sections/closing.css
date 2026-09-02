@@ -1,0 +1,132 @@
+/* Closing / footer CTA — the last thing on the page, un-pinned, normal
+   document scroll (matches partners.css's section 9 right above it). Layout
+   is a direct match of the client's reference (a photo band up top, then a
+   centered headline/subline, a thin drawn-in divider, and a row of small
+   black icon buttons) — see docs/content.md for the reference screenshot
+   this was built from. */
+
+.closing-section {
+  position: relative;
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.closing-media {
+  width: 100%;
+  height: clamp(260px, 42vw, 460px);
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(1.08);
+  transition: opacity 1s ease, transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.closing-media.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.closing-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+.closing-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(48px, 8vh, 88px) 24px clamp(64px, 10vh, 110px);
+}
+
+.closing-mask {
+  overflow: hidden;
+}
+
+.closing-heading,
+.closing-subheading {
+  transform: translateY(100%);
+  will-change: transform;
+}
+
+.closing-heading {
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(26px, 3.6vw, 42px);
+  line-height: 1.3;
+  color: var(--color-ink);
+}
+
+.closing-subheading {
+  margin-top: 10px;
+  font-family: var(--font-ar-secondary);
+  font-weight: 600;
+  font-size: clamp(15px, 1.6vw, 19px);
+  color: var(--color-ink-muted);
+}
+
+.closing-divider {
+  margin-top: clamp(28px, 4vh, 44px);
+  width: min(560px, 70vw);
+  height: 1px;
+  background: rgba(26, 26, 26, 0.14);
+  transform: scaleX(0);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.closing-divider.is-visible {
+  transform: scaleX(1);
+}
+
+.closing-socials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 1.6vw, 16px);
+  margin-top: clamp(24px, 4vh, 36px);
+}
+
+.closing-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--color-ink);
+  color: var(--color-surface);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.3s ease, box-shadow 0.3s ease;
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+.closing-socials.is-visible .closing-social {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.closing-social:hover {
+  transform: translateY(-5px) scale(1.08);
+  background: var(--color-logo-purple);
+  box-shadow: 0 14px 26px -14px rgba(107, 79, 160, 0.5);
+}
+
+.closing-social svg {
+  width: 46%;
+  height: 46%;
+}
+
+@media (max-width: 640px) {
+  .closing-socials {
+    gap: 10px;
+  }
+
+  .closing-social {
+    width: 40px;
+    height: 40px;
+  }
+}

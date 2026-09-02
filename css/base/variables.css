@@ -1,0 +1,38 @@
+:root {
+  --color-bg: #0b0d10;
+  --color-accent: #c94b3f;
+  --color-text: #f5f1ea;
+  --color-text-muted: rgba(245, 241, 234, 0.75);
+  --font-ar: "IBM Plex Sans Arabic", sans-serif;
+  --font-en: "Poppins", sans-serif;
+  --font-ar-secondary: "Cairo", sans-serif;
+  --font-en-secondary: "Reey", sans-serif;
+
+  --color-surface: #ffffff;
+  --color-ink: #1a1a1a;
+  --color-ink-muted: #6f6f6f;
+  --color-gold: #b9862f;
+  --color-values-bg: #9686ac;
+
+  /* The TDX color mark's own three fills (assets/icons/tdx-logo-color.svg). */
+  --color-logo-navy: #2c2156;
+  --color-logo-teal: #78c9b5;
+  --color-logo-lavender: #a690d5;
+  /* Same purple family as --color-logo-lavender, deepened for text/accent
+     use where the pastel tone doesn't have enough contrast on white. */
+  --color-logo-purple: #6b4fa0;
+}
+
+/* en/index.html shares every stylesheet with the Arabic page, and almost all
+   headings/body copy are wired to --font-ar/--font-ar-secondary (see
+   fonts.css) rather than a per-page font. Re-pointing those two tokens to
+   Poppins, scoped to the English document only, makes Poppins the de facto
+   primary font across the whole English site without touching a single
+   selector or affecting index.html's --font-ar (still IBM Plex Sans Arabic).
+   Exception: .intro-title (hero's "The Destinations Experts") is hardcoded
+   to Playfair Display in hero.css, not driven by these tokens, so it's
+   unaffected by this override — left exactly as designed. */
+html[lang="en"] {
+  --font-ar: var(--font-en);
+  --font-ar-secondary: var(--font-en);
+}

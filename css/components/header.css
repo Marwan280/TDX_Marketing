@@ -1,0 +1,223 @@
+/* Header — invisible on the hero itself, only appearing once the user has
+   fully scrolled past the hero's opening moment (logo grow-in, welcome text,
+   coffee line) into the story beyond it — not on the first scroll tick.
+   The bar/logo/hamburger fade in as a group via .is-scrolled; the nav links
+   and language switch are controlled separately (below) so a menu opened
+   just before scrolling back up into the hero stays reachable — without the
+   bar, logo or hamburger reappearing — instead of snapping shut. */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 12px 0;
+  background-color: transparent;
+  pointer-events: none;
+  transition: background-color 0.3s ease;
+}
+
+.site-header.is-scrolled {
+  background-color: rgba(45, 45, 45, 0.62);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.header-brand,
+.nav-toggle {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.site-header.is-scrolled .header-brand,
+.site-header.is-scrolled .nav-toggle {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.header-logo-mark {
+  display: block;
+  width: 62px;
+  aspect-ratio: 782.01 / 397.2;
+  -webkit-mask-image: url('../../assets/icons/tdx-logo.svg');
+  mask-image: url('../../assets/icons/tdx-logo.svg');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  background-color: var(--color-text);
+}
+
+/* Collapsed by default — unfurls open next to the logo when the hamburger
+   is toggled, instead of being visible all the time. */
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: max-width 0.45s ease, opacity 0.3s ease;
+}
+
+.main-nav.is-open {
+  max-width: 800px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.main-nav a {
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.92;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.main-nav a:hover {
+  opacity: 1;
+  color: var(--color-accent);
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.lang-switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 17px;
+  color: var(--color-text);
+  border: 1px solid rgba(245, 241, 234, 0.3);
+  font-family: var(--font-en);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: border-color 0.2s ease, color 0.2s ease, opacity 0.3s ease;
+}
+
+.site-header.is-scrolled .lang-switch,
+.main-nav.is-open ~ .lang-switch {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lang-switch:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.nav-toggle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 241, 234, 0.3);
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.nav-toggle:hover {
+  border-color: var(--color-accent);
+}
+
+.nav-toggle-bar {
+  width: 14px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: var(--color-text);
+  transition: transform 0.3s ease, opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.nav-toggle:hover .nav-toggle-bar {
+  background: var(--color-accent);
+}
+
+@media (max-width: 768px) {
+  /* Desktop unfurls the nav horizontally next to the logo — with 5 links
+     that only works when there's real width to unfurl INTO. On a phone
+     that same max-width: 0 -> 800px transition just overflowed the links
+     straight off the right edge of the screen instead. Below this
+     breakpoint .main-nav becomes its own dropdown panel instead: anchored
+     under the controls row (.header-controls gets position: relative to
+     host it), links stacked vertically, unfurling by height instead of
+     width so it can never overflow sideways regardless of link count. */
+  .header-controls {
+    position: relative;
+  }
+
+  .main-nav {
+    position: absolute;
+    top: calc(100% + 14px);
+    inset-inline-end: 0;
+    z-index: 10;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    width: max(220px, 62vw);
+    max-width: none;
+    max-height: 0;
+    padding: 0 8px;
+    border-radius: 16px;
+    background: rgba(30, 27, 24, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    white-space: normal;
+    transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease;
+  }
+
+  .main-nav.is-open {
+    max-width: none;
+    max-height: 320px;
+    padding: 8px;
+  }
+
+  .main-nav a {
+    padding: 12px 10px;
+    border-radius: 10px;
+    font-size: 15px;
+  }
+
+  .main-nav a:active {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}

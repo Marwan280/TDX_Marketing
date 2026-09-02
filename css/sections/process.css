@@ -1,0 +1,148 @@
+/* Process intro + cards — both live inside .wipe-panel (see hero.css), stacked
+   on ONE screen together. Sized compactly so everything fits within the
+   pinned viewport with no extra scrolling needed after the wipe finishes. */
+.process-intro {
+  max-width: 720px;
+  text-align: center;
+}
+
+/* Secondary font (Cairo) as a subtle accent on this small kicker label —
+   everything else in the section stays on the primary Arabic font. */
+.process-eyebrow {
+  display: block;
+  font-family: var(--font-ar-secondary);
+  font-weight: 700;
+  font-size: clamp(13px, 1.5vw, 17px);
+  color: var(--color-gold);
+  letter-spacing: 0.02em;
+}
+
+.process-heading {
+  margin-top: 8px;
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(24px, 3.4vw, 38px);
+  color: var(--color-ink);
+}
+
+.process-subtitle {
+  margin-top: 10px;
+  font-family: var(--font-ar);
+  font-size: clamp(14px, 1.4vw, 16px);
+  line-height: 1.7;
+  color: var(--color-ink-muted);
+}
+
+.process-cards {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(12px, 1.6vw, 22px);
+  width: 100%;
+  max-width: 1300px;
+}
+
+/* A faint connecting line strung through the icon row — ties the 4 steps
+   together as one process/timeline instead of 4 unrelated tiles. */
+.process-cards::before {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 66px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(185, 134, 47, 0.35) 15%, rgba(185, 134, 47, 0.35) 85%, transparent);
+  z-index: 0;
+}
+
+.process-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  padding: 26px 18px 22px;
+  border-radius: 20px;
+  border: 1px solid rgba(26, 26, 26, 0.08);
+  background: linear-gradient(180deg, rgba(185, 134, 47, 0.05), rgba(255, 255, 255, 0.6));
+  box-shadow: 0 1px 3px rgba(20, 16, 14, 0.05);
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  will-change: opacity, transform;
+}
+
+.process-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(185, 134, 47, 0.45);
+  box-shadow: 0 18px 34px rgba(20, 16, 14, 0.12);
+}
+
+/* Secondary font (Reey — script) as a deliberate accent: just these two
+   digits, never body copy, so its low legibility at small sizes never
+   matters and its character actually gets to show. */
+.process-card-number {
+  display: block;
+  font-family: var(--font-en-secondary);
+  font-weight: 400;
+  font-size: clamp(30px, 3vw, 40px);
+  color: var(--color-gold);
+  opacity: 0.7;
+  line-height: 1;
+}
+
+.process-card-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(46px, 4.6vw, 56px);
+  height: clamp(46px, 4.6vw, 56px);
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 1.5px solid rgba(185, 134, 47, 0.4);
+  color: var(--color-gold);
+  box-shadow: 0 4px 12px rgba(185, 134, 47, 0.12);
+}
+
+.process-card-media svg {
+  width: 42%;
+  height: 42%;
+}
+
+.process-card-title {
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(16px, 1.5vw, 19px);
+  color: var(--color-ink);
+}
+
+.process-card-desc {
+  font-family: var(--font-ar);
+  font-size: clamp(12.5px, 1.15vw, 14px);
+  line-height: 1.65;
+  color: var(--color-ink-muted);
+  max-width: 230px;
+}
+
+@media (max-width: 900px) {
+  .process-cards::before {
+    display: none;
+  }
+  .process-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 560px) {
+  .process-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .process-card {
+    padding: 20px 14px 16px;
+  }
+  .process-card-desc {
+    display: none;
+  }
+}

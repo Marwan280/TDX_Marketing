@@ -1,0 +1,473 @@
+/* Section 8 ("work" — recent work / case studies). The intro (below) is a
+   plain reveal, same as services.css's. Everything after it is now ONE
+   pinned block (.work-pin, like .wipe-panel/.values-panel in hero.css) —
+   NOT one sticky element per case study. Moving from case study to case
+   study is a pure in-place crossfade (opacity/blur only, nothing slides
+   vertically), and the client mark cluster on the side reshuffles like a
+   stack of cards: the active client's mark comes to the front, the other
+   two recede behind it. See js/modules/work-stories.js for all the timing —
+   this file only defines the resting geometry (front/mid/back slots) and
+   lets JS toggle which client mark sits in which slot. */
+
+.work-section {
+  position: relative;
+  background: var(--color-surface);
+}
+
+.work-intro {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.work-mask {
+  overflow: hidden;
+}
+
+.work-heading,
+.work-subheading {
+  transform: translateY(100%);
+  will-change: transform;
+}
+
+.work-heading {
+  margin-top: clamp(16px, 3vh, 40px);
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(32px, 5.6vw, 66px);
+  line-height: 1.15;
+  color: var(--color-ink);
+}
+
+.work-subheading {
+  margin-top: 16px;
+  font-family: var(--font-ar-secondary);
+  font-weight: 600;
+  font-size: clamp(16px, 1.8vw, 22px);
+  color: var(--color-ink-muted);
+}
+
+/* Client logo wall — fills the open space below the intro subheading.
+   Reveals as a staggered grid each time it scrolls into view, and hides
+   again on the way out (see initLogoWall() in work-stories.js, a plain
+   IntersectionObserver — this doesn't need the pinned-scroll math the rest
+   of the file uses), then each tile gets its own punchy hover: lift, pop,
+   and un-desaturate. */
+.work-logos {
+  width: 100%;
+  max-width: 1240px;
+  margin-top: clamp(48px, 8vh, 88px);
+}
+
+.work-logos-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: clamp(10px, 1.4vw, 18px);
+}
+
+.work-logo-tile {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 18px;
+  background: var(--color-surface);
+  border: 1px solid rgba(26, 26, 26, 0.08);
+  box-shadow: 0 6px 16px -10px rgba(20, 16, 40, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13%;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px) scale(0.88);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease,
+    box-shadow 0.35s ease, border-color 0.35s ease;
+  transition-delay: calc(var(--i, 0) * 45ms);
+}
+
+.work-logos.is-visible .work-logo-tile {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.work-logo-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: grayscale(0.25) opacity(0.85);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.35s ease;
+}
+
+.work-logo-tile:hover {
+  transform: translateY(-10px) scale(1.08);
+  box-shadow: 0 26px 44px -18px rgba(107, 79, 160, 0.35);
+  border-color: color-mix(in srgb, var(--color-logo-purple) 45%, transparent);
+  z-index: 2;
+}
+
+.work-logo-tile:hover img {
+  transform: scale(1.14) rotate(-3deg);
+  filter: grayscale(0) opacity(1);
+}
+
+@media (max-width: 900px) {
+  .work-logos-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .work-logos-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* The pin: one continuous scroll range (450vh, set inline via nothing —
+   see .work-pin-outer height below) split into 3 equal thirds, one per
+   case study — 150vh each, ~50vh per beat (challenge/action/result), in
+   line with the ~35-45vh/beat pace the other pinned sections (services
+   cards, hero's process/values cards) already use. Was 900vh (100vh/beat)
+   until that made this section feel noticeably slower to scroll through
+   than everything around it. Nothing here ever moves the pin itself —
+   only the slide crossfade and the mark-stack respond to scroll. */
+.work-pin-outer {
+  position: relative;
+  height: 450vh;
+}
+
+.work-pin {
+  position: sticky;
+  top: 0;
+  /* svh instead of plain vh — see the identical comment on .hero-pin in
+     hero.css for why (mobile address-bar resize mid-scroll). */
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background: var(--color-surface);
+}
+
+.work-pin-glow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.work-pin-glow::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -8%;
+  top: 50%;
+  width: clamp(360px, 42vw, 680px);
+  height: clamp(360px, 42vw, 680px);
+  transform: translateY(-50%);
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.2;
+  background: radial-gradient(circle, var(--accent), transparent 70%);
+  transition: background 0.7s ease;
+  animation: work-glow-drift 24s ease-in-out infinite;
+}
+
+@keyframes work-glow-drift {
+  0%, 100% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-46%) scale(1.12); }
+}
+
+.work-pin-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(32px, 6vw, 100px);
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* --- Client mark cluster (logo placeholder, "playing card" stack) --- */
+
+.work-marks {
+  /* Visually placed AFTER .work-slides (order: 2) even though it's first in
+     the DOM (kept there so the decorative, aria-hidden marks don't get
+     read before the actual case-study content) — this puts the text
+     column at the inline-start side (right in Arabic, left in English)
+     so it lands at the true edge of the page, not stuck in the middle. */
+  order: 2;
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(220px, 26vw, 370px);
+  height: clamp(220px, 26vw, 370px);
+  margin-inline-end: clamp(16px, 3vw, 40px);
+}
+
+.work-mark {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 62%;
+  height: 62%;
+  border-radius: 26px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(150deg, var(--mark-accent-a), var(--mark-accent-b));
+  box-shadow: 0 24px 50px -18px rgba(20, 16, 40, 0.35);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+  will-change: transform, opacity;
+}
+
+.work-mark-label {
+  transform: rotate(-45deg);
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: clamp(22px, 2.6vw, 34px);
+  letter-spacing: 0.02em;
+  color: #fff;
+  direction: ltr;
+}
+
+/* Real client logo, upright inside the rotated diamond — each logo file's
+   own background (see the --mark-accent overrides below) is picked to
+   match so there's no visible seam between the image and the diamond. */
+.work-mark-logo {
+  width: 74%;
+  height: 74%;
+  object-fit: contain;
+  transform: rotate(-45deg);
+}
+
+.work-mark.is-front {
+  transform: rotate(45deg) translate(0, 0) scale(1);
+  z-index: 3;
+  opacity: 1;
+}
+
+.work-mark.is-mid {
+  transform: rotate(45deg) translate(-22%, -34%) scale(0.62);
+  z-index: 2;
+  opacity: 0.88;
+}
+
+.work-mark.is-back {
+  transform: rotate(45deg) translate(20%, 36%) scale(0.5);
+  z-index: 1;
+  opacity: 0.6;
+}
+
+/* Two extra diamonds that never move and never swap — pure background
+   filler so the cluster reads as a fuller pile (like the reference's
+   photo wall) instead of just the 3 client marks that actually shuffle.
+   No data-mark attribute, so js/modules/work-stories.js's selector
+   (.work-mark[data-mark]) skips them entirely. */
+.work-mark-static {
+  z-index: 0;
+  opacity: 0.4;
+  background: linear-gradient(150deg, #d8d3e6, #b9b2cf);
+  transition: none;
+}
+
+.work-mark-static.is-slot-a {
+  /* Off the 45deg grid on purpose (35deg, not 45deg) — an irregular pile,
+     not a neat grid. Sits in the gap the mid/back marks (upper-left and
+     lower-right) DON'T cover, so it peeks out from behind and between them
+     instead of hiding fully under the front mark or floating off on its
+     own away from the whole pile. */
+  transform: rotate(35deg) translate(-42%, 28%) scale(0.36);
+}
+
+.work-mark-static.is-slot-b {
+  transform: rotate(54deg) translate(40%, -34%) scale(0.34);
+}
+
+/* --- Text column (title, story beats, stats) --- */
+
+.work-slides {
+  order: 1;
+  position: relative;
+  flex: 1 1 560px;
+  min-width: 0;
+  max-width: 620px;
+  min-height: clamp(440px, 64vh, 640px);
+}
+
+.work-slide {
+  position: absolute;
+  inset: 0 0 auto 0;
+  width: 100%;
+  padding-top: clamp(56px, 8vh, 84px);
+  opacity: 0;
+  will-change: opacity, filter;
+}
+
+/* The client name sits flush at the true outer edge (no indent); the
+   story below it (title, beats, stats) is indented in from THAT edge, so
+   the name pokes out a bit further than everything under it instead of
+   lining up with it. */
+.work-slide-client {
+  position: absolute;
+  top: 0;
+  inset-inline-start: 0;
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(20px, 2.6vw, 32px);
+  color: var(--accent);
+  text-align: start;
+}
+
+.work-slide-body {
+  padding-inline-start: clamp(18px, 3.2vw, 40px);
+}
+
+.work-card-title {
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(24px, 3.4vw, 42px);
+  line-height: 1.25;
+  color: var(--color-ink);
+}
+
+.work-beats {
+  position: relative;
+  margin-top: clamp(22px, 3.6vh, 36px);
+  min-height: clamp(200px, 26vh, 260px);
+}
+
+.work-beat {
+  position: absolute;
+  inset: 0 0 auto 0;
+  will-change: opacity, transform, filter;
+}
+
+.work-beat-label {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, white);
+  color: var(--accent);
+  font-family: var(--font-ar-secondary);
+  font-weight: 700;
+  font-size: clamp(12px, 1vw, 14px);
+}
+
+.work-beat-text {
+  margin-top: 14px;
+  font-family: var(--font-ar);
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.8;
+  color: var(--color-ink);
+  max-width: 560px;
+}
+
+.work-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(18px, 2.6vw, 36px);
+  margin-top: 20px;
+}
+
+.work-stat-number {
+  display: block;
+  font-family: var(--font-en);
+  font-weight: 800;
+  font-size: clamp(28px, 3.2vw, 42px);
+  color: var(--accent);
+  line-height: 1;
+  direction: ltr;
+}
+
+.work-stat-label {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-ar);
+  font-size: clamp(12.5px, 1.05vw, 14px);
+  color: var(--color-ink-muted);
+  max-width: 160px;
+}
+
+.work-beat-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: clamp(24px, 3.6vh, 40px);
+}
+
+.work-beat-dot {
+  width: 26px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(26, 26, 26, 0.14);
+  transition: background-color 0.3s ease;
+}
+
+.work-beat-dot.is-active {
+  background: var(--accent);
+}
+
+.work-slide[data-slide="0"] { --accent: var(--color-logo-navy); }
+.work-slide[data-slide="1"] { --accent: var(--color-logo-purple); }
+.work-slide[data-slide="2"] { --accent: var(--color-logo-teal); }
+
+/* 90min's own logo file already sits on a navy square, so this diamond
+   stays navy too — matched to the jpeg's exact navy (#081058) so there's
+   no seam between the image and its diamond. Travel Maker and Homy's logo
+   files sit on white, so their diamonds are white instead of the old
+   purple/teal fill. */
+.work-mark[data-mark="0"] { --mark-accent-a: #081058; --mark-accent-b: #081058; }
+.work-mark[data-mark="1"] { --mark-accent-a: #ffffff; --mark-accent-b: #ffffff; }
+.work-mark[data-mark="2"] { --mark-accent-a: #ffffff; --mark-accent-b: #ffffff; }
+
+/* Travel Maker's logo file has a lot of empty white margin baked in, so at
+   the shared 74% size it reads tiny inside its diamond. Its background is
+   the same white as the diamond, so scaling the image up (and letting the
+   diamond's overflow: hidden crop the excess white) is a seamless zoom. */
+.work-mark[data-mark="1"] .work-mark-logo {
+  transform: rotate(-45deg) scale(1.9);
+}
+
+@media (max-width: 900px) {
+  .work-pin-row {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .work-marks {
+    align-self: center;
+    width: clamp(160px, 42vw, 220px);
+    height: clamp(160px, 42vw, 220px);
+    flex: 0 0 auto;
+  }
+
+  .work-slides {
+    width: 100%;
+    max-width: 100%;
+    min-height: clamp(380px, 56vh, 520px);
+  }
+
+  .work-slide-body {
+    padding-inline-start: 14px;
+  }
+
+  .work-card-title {
+    font-size: clamp(20px, 5.6vw, 28px);
+  }
+
+  .work-slide-client {
+    font-size: clamp(16px, 4.4vw, 22px);
+  }
+
+  .work-stats {
+    gap: 16px;
+  }
+}

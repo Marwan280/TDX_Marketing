@@ -1,0 +1,184 @@
+/* Values (زبدة السالفة) — lives entirely inside .values-panel (see hero.css).
+   The heading opens at its full size and STAYS there — no shrink, no move —
+   for the entire section. Once the panel's own curtain has fully swept in
+   (fast, see updateValues()'s CURTAIN_END), a filmstrip of the 3 value
+   cards drags across the screen in front of that static heading, one
+   scroll pixel at a time: card 1 enters from the real screen edge (the
+   track is full viewport width, wider than any card), travels in to settle
+   centered, then keeps sliding — dragging card 2 in right behind it like a
+   single continuous ribbon — until card 3 settles and the section ends.
+   All driven by scroll-story.js's updateValues() positioning #valuesStrip's
+   children and setting one shared translateX; nothing here animates on its
+   own. */
+.values-intro {
+  position: relative;
+  z-index: 2;
+  max-width: min(1300px, 92vw);
+  text-align: center;
+}
+
+/* Secondary font (Cairo) as a subtle accent on this small kicker label —
+   everything else in the section stays on the primary Arabic font. */
+.values-eyebrow {
+  display: block;
+  font-family: var(--font-ar-secondary);
+  font-weight: 700;
+  font-size: clamp(15px, 1.9vw, 26px);
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.03em;
+}
+
+/* Big and static for the section's whole lifetime — deliberately no
+   will-change/shrink hook here, this size never changes. */
+.values-heading {
+  margin-top: 14px;
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(36px, 7vw, 88px);
+  line-height: 1.15;
+  color: #fff;
+}
+
+/* Per-word blur-in target — split from .values-eyebrow/.values-heading's
+   text by scroll-story.js so each word can carry its own blur, going
+   sharp -> blurred one at a time as card 1 slides in over them (see
+   updateValues()'s blurT). */
+.vh-word {
+  display: inline-block;
+  filter: blur(0);
+  will-change: filter;
+}
+
+/* The viewport window the filmstrip drags through: full screen width, edge
+   to edge, taken clean out of the panel's own flex flow and absolutely
+   centered over it — so the card's ENTRANCE travels all the way from the
+   real screen edge, not just from the edge of some narrower box. The
+   card itself (see .value-card) stays capped well below this width and
+   rests centered inside it once settled — the settled SIZE is unchanged,
+   only how far it has to travel to get there. Overlapping the static
+   heading's screen position is what makes the "card slides over the text"
+   look possible — plain stacking below the heading can't do it. */
+.values-track {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: clamp(380px, 66vh, 720px);
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+}
+
+/* Cards are positioned explicitly in JS (each gets a fixed `left` in the
+   strip's own coordinate space, card 1 at 0) rather than relying on flex
+   auto-packing — with the card narrower than the track, flex's packing
+   direction under RTL/row-reverse got too fiddly to reason about reliably.
+   One shared translateX (also JS) then drags the whole strip. */
+.values-strip {
+  --values-gap: clamp(12px, 1.6vw, 28px);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.value-card {
+  position: absolute;
+  top: 0;
+  width: min(1400px, 76vw);
+  height: 100%;
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+.value-card-media {
+  position: absolute;
+  inset: 0;
+}
+
+.value-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Two stacked gradients, not one: a bottom-up fade for general legibility
+   over any photo, plus a second fade from the text's own side (see
+   .value-card-label) so the corner the copy sits in is reliably dark
+   regardless of what's directly behind it. "to left" reads as dark-at-the-
+   right under the default RTL layout (inline-start there); the [dir="ltr"]
+   override flips it to dark-at-the-left to match .value-card-label moving
+   with it — the two must always point the same way. */
+.value-card-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(6, 5, 4, 0.85) 0%, rgba(6, 5, 4, 0.35) 32%, transparent 58%),
+    linear-gradient(to left, rgba(6, 5, 4, 0.55) 0%, transparent 55%);
+}
+
+[dir='ltr'] .value-card-media::after {
+  background: linear-gradient(to top, rgba(6, 5, 4, 0.85) 0%, rgba(6, 5, 4, 0.35) 32%, transparent 58%),
+    linear-gradient(to right, rgba(6, 5, 4, 0.55) 0%, transparent 55%);
+}
+
+/* Sits directly on the gradient — no card/blur/background of its own, same
+   restrained treatment as .about-kicker/.about-heading over .about-overlay.
+   inset-inline-start (not -end) is deliberate: it resolves to the right
+   under our default RTL and the left under [dir="ltr"], i.e. Arabic copy
+   reads from the right, English from the left — matching how each language
+   is actually read, not a fixed physical side. */
+.value-card-label {
+  position: absolute;
+  inset-inline-start: 32px;
+  bottom: 32px;
+  z-index: 1;
+  max-width: min(420px, 46%);
+}
+
+/* Secondary font (Reey — script) as a deliberate accent, same reasoning as
+   .process-card-number: short digits only, never body copy. */
+.value-card-number {
+  display: block;
+  font-family: var(--font-en-secondary);
+  font-weight: 400;
+  font-size: clamp(15px, 1.6vw, 22px);
+  color: var(--color-gold);
+  opacity: 0.9;
+  line-height: 1;
+}
+
+.value-card-title {
+  margin-top: 8px;
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(20px, 2.6vw, 34px);
+  color: #fff;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
+}
+
+.value-card-desc {
+  margin-top: 10px;
+  font-family: var(--font-ar);
+  font-size: clamp(13px, 1.3vw, 17px);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 900px) {
+  /* Was switched to a static, flex-column vertical stack here — but
+     .values-track lives inside .hero-pin (position: sticky; overflow:
+     hidden; height: 100vh), so a real stacked height taller than one
+     screen has nowhere to go: cards 2 and 3 ended up permanently
+     unreachable, no scroll could ever bring them into that clipped box.
+     The horizontal scroll-driven drag (same JS, same absolute positioning,
+     just at a phone-appropriate size below) is what actually works here —
+     and per the user, keeping that exact interaction on mobile was the
+     point, not replacing it. */
+  .value-card-label {
+    max-width: 78%;
+  }
+}

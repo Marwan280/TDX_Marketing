@@ -1,0 +1,337 @@
+/* Services (Section 7) — a self-contained "stacking cards" scroll sequence,
+   deliberately its OWN pin rather than another phase crammed into the
+   hero's shared timeline (see docs/content.md's notes on why that timeline
+   is already stretched thin). Cards sit in normal document flow, each one
+   `position: sticky; top: 0`; later cards pull up over earlier ones with a
+   negative margin so there's a real overlap window where the outgoing card
+   is still visible, shrinking and dimming, while the incoming one slides
+   up over it — see js/modules/services-stack.js for the scroll math and
+   the fixed progress rail that tracks which card is active. */
+
+.services-section {
+  position: relative;
+  background: var(--color-surface);
+}
+
+.services-intro {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.services-mask {
+  overflow: hidden;
+}
+
+.services-heading,
+.services-subheading {
+  transform: translateY(100%);
+  will-change: transform;
+}
+
+.services-heading {
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(36px, 6.4vw, 78px);
+  line-height: 1.1;
+  color: var(--color-ink);
+}
+
+.services-subheading {
+  margin-top: 16px;
+  font-family: var(--font-ar-secondary);
+  font-weight: 600;
+  font-size: clamp(16px, 1.8vw, 23px);
+  color: var(--color-ink-muted);
+}
+
+.services-stack {
+  position: relative;
+}
+
+/* Each card owns 130vh of scroll: ~100vh for its entrance/hold, the rest is
+   what lets the NEXT card's negative margin pull it up early — see below. */
+.service-card {
+  position: relative;
+  height: 130vh;
+}
+
+.service-card + .service-card {
+  /* Pulls this card's box up so it starts overlapping the previous card's
+     still-sticky content instead of only beginning once the previous one
+     has fully finished — this is what makes the transition read as one
+     card physically sliding over another, not a hard cut. */
+  margin-top: -55vh;
+}
+
+.service-card-pin {
+  position: sticky;
+  top: 0;
+  /* svh instead of plain vh — see the identical comment on .hero-pin in
+     hero.css for why (mobile address-bar resize mid-scroll). */
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transform-origin: 50% 100%;
+  will-change: transform, filter;
+}
+
+.service-card-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--card-bg);
+  z-index: 0;
+}
+
+.service-card-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Any card with a real photo (add .has-photo + an <img> the same way card 1
+   does — this rule isn't card-1-specific, so the next photo dropped into
+   any other card gets the identical treatment for free): --card-bg stays as
+   a fallback (shows briefly while the image loads), and a genuinely DARK
+   scrim — not a tint of the card's own pale gradient, which was never dark
+   enough for white text over a busy photo — sits between the photo and the
+   content so .service-card-content's white text (forced via the :has()
+   rule below, overriding each card's own light/dark --card-fg) stays
+   reliably readable regardless of what's in the shot. */
+.service-card-bg.has-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 6, 16, 0.72);
+}
+
+/* !important is load-bearing here: each card's own nth-child rule below
+   (.service-card:nth-child(N) .service-card-pin { --card-fg: ... }) is two
+   classes + :nth-child, more specific than this single class + :has(), so
+   without it this override silently lost to whichever card's own light/dark
+   default came later in the cascade — exactly what happened on card 1
+   before this was added. "has a photo" should always win over a card's
+   flat-color default, for any current or future photo card alike. */
+.service-card-pin:has(.has-photo) {
+  --card-fg: var(--color-text) !important;
+}
+
+.service-card-glow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.service-card-glow::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(360px, 46vw, 720px);
+  height: clamp(360px, 46vw, 720px);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.28;
+  background: radial-gradient(circle, var(--card-fg), transparent 70%);
+  animation: service-glow-drift 20s ease-in-out infinite;
+}
+
+@keyframes service-glow-drift {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-46%, -54%) scale(1.15); }
+}
+
+.service-card-bignum {
+  position: absolute;
+  inset-inline-end: clamp(-10px, 1vw, 30px);
+  bottom: clamp(60px, 12vh, 130px);
+  z-index: 0;
+  font-family: var(--font-en);
+  font-weight: 900;
+  font-size: clamp(140px, 22vw, 360px);
+  line-height: 1;
+  color: var(--card-fg);
+  opacity: 0.16;
+  pointer-events: none;
+  user-select: none;
+}
+
+.service-card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  max-width: 720px;
+  padding: 0 24px;
+  text-align: center;
+  color: var(--card-fg);
+  will-change: opacity, transform, filter;
+}
+
+.service-card-count {
+  font-family: var(--font-en);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  opacity: 0.7;
+  direction: ltr;
+}
+
+.service-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(58px, 5.4vw, 72px);
+  height: clamp(58px, 5.4vw, 72px);
+  margin: 18px 0 6px;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--card-fg) 45%, transparent);
+  color: var(--card-fg);
+}
+
+.service-card-icon svg {
+  width: 46%;
+  height: 46%;
+}
+
+.service-card-title {
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(24px, 3.2vw, 40px);
+}
+
+.service-card-name {
+  margin-top: 4px;
+  font-family: var(--font-ar-secondary);
+  font-weight: 600;
+  font-size: clamp(14px, 1.5vw, 18px);
+  opacity: 0.85;
+}
+
+.service-card-desc {
+  margin-top: 14px;
+  font-family: var(--font-ar);
+  font-size: clamp(14px, 1.4vw, 17px);
+  line-height: 1.7;
+  max-width: 460px;
+  opacity: 0.85;
+}
+
+/* One single hue — purple/lavender, the brand's #a690d5 family — carried
+   across all 8 cards as one continuous light -> dark ramp: card 1 opens on
+   the lightest tint, card 8 closes on the deepest shade (right at the edge
+   of the brand navy #2c2156, without actually becoming a different color).
+   Each card is two ADJACENT steps of the same 9-point ramp, so the card-to-
+   card handoff is seamless — no hue changes, no light/dark alternation. */
+.service-card:nth-child(1) .service-card-pin { --card-bg: linear-gradient(150deg, #e9e4f1, #cfc6e1); --card-fg: var(--color-ink); }
+.service-card:nth-child(2) .service-card-pin { --card-bg: linear-gradient(150deg, #cfc6e1, #b5a5d4); --card-fg: var(--color-ink); }
+.service-card:nth-child(3) .service-card-pin { --card-bg: linear-gradient(150deg, #b5a5d4, #9a84c8); --card-fg: var(--color-ink); }
+.service-card:nth-child(4) .service-card-pin { --card-bg: linear-gradient(150deg, #9a84c8, #8062bc); --card-fg: var(--color-ink); }
+.service-card:nth-child(5) .service-card-pin { --card-bg: linear-gradient(150deg, #8062bc, #6746aa); --card-fg: var(--color-text); }
+.service-card:nth-child(6) .service-card-pin { --card-bg: linear-gradient(150deg, #6746aa, #53368c); --card-fg: var(--color-text); }
+.service-card:nth-child(7) .service-card-pin { --card-bg: linear-gradient(150deg, #53368c, #3d2768); --card-fg: var(--color-text); }
+.service-card:nth-child(8) .service-card-pin { --card-bg: linear-gradient(150deg, #3d2768, #271943); --card-fg: var(--color-text); }
+
+.service-card:nth-child(1) .service-card-pin { z-index: 1; }
+.service-card:nth-child(2) .service-card-pin { z-index: 2; }
+.service-card:nth-child(3) .service-card-pin { z-index: 3; }
+.service-card:nth-child(4) .service-card-pin { z-index: 4; }
+.service-card:nth-child(5) .service-card-pin { z-index: 5; }
+.service-card:nth-child(6) .service-card-pin { z-index: 6; }
+.service-card:nth-child(7) .service-card-pin { z-index: 7; }
+.service-card:nth-child(8) .service-card-pin { z-index: 8; }
+
+/* Fixed progress rail — only shown while the stack itself is on screen (see
+   .is-visible, toggled from JS via an intersection check on the wrapper).
+   Sits on the block-end/inline-end corner via logical properties so it
+   mirrors automatically between the Arabic (RTL) and English (LTR) pages. */
+.services-progress {
+  position: fixed;
+  top: 50%;
+  inset-inline-end: clamp(18px, 3vw, 40px);
+  transform: translateY(-50%);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.services-progress.is-visible {
+  opacity: 1;
+}
+
+.services-progress-current {
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--color-ink);
+  direction: ltr;
+}
+
+.services-progress-track {
+  position: relative;
+  width: 2px;
+  height: 140px;
+  border-radius: 2px;
+  background: rgba(26, 26, 26, 0.14);
+  overflow: hidden;
+}
+
+.services-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  border-radius: 2px;
+  background: var(--color-gold);
+  transition: height 0.25s ease;
+}
+
+.services-progress-total {
+  font-family: var(--font-en);
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--color-ink-muted);
+  direction: ltr;
+}
+
+@media (max-width: 900px) {
+  .services-progress {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .service-card + .service-card {
+    margin-top: -40vh;
+  }
+
+  .service-card-bignum {
+    font-size: clamp(120px, 34vw, 220px);
+  }
+
+  .service-card-desc {
+    max-width: 320px;
+  }
+}

@@ -1,0 +1,515 @@
+/* Hero — height MUST match scroll-story.js's TOTAL_SCROLL_VH (hero + story +
+   wipe + values + trust), or the phase fractions computed there assume more
+   scrollable range than actually exists and the last phase(s) become
+   unreachable before their own progress ever hits 1. */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 1265vh;
+}
+
+.hero-pin {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  /* svh (small viewport height) instead of plain vh — on real mobile
+     browsers the address bar hides/shows as you scroll, so plain `vh`
+     keeps resizing this box mid-gesture and the scroll-progress math in
+     scroll-story.js (which reads window.innerHeight live) reads a moving
+     target, causing phases to visibly jump/overlap. svh always uses the
+     smallest possible viewport (chrome fully shown), so this box's own
+     size never changes during a scroll. Plain vh stays first as a fallback
+     for browsers that don't support svh yet. */
+  height: 100vh;
+  height: 100svh;
+  min-height: 640px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+}
+
+/* Full-bleed, same reveal mechanism as before (still just z-index: -1 behind
+   .hero-media, uncovered as its curtain lifts — see SHRINK_START/END in
+   scroll-story.js) — only the man himself changed from a small corner photo
+   to a full-screen video whose own playback position IS the reveal now,
+   scroll-scrubbed from 0 up to the "holding the dallah, looking at camera"
+   frame (see updateCoffeeVideo() in scroll-story.js), instead of a
+   translateY entrance. .coffee-title/.coffee-subtitle already use
+   --color-ink (dark) rather than --color-text (light) specifically because
+   this scene's backdrop — this white studio shoot, same as the old photo —
+   was always meant to read as light, not the dark cityscape behind it. */
+.hero-coffee-media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.hero-coffee-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Opaque until scroll-story.js fades it out in lockstep with the TDX logo
+   (it's driven off the logo's own computed opacity every tick, not a
+   separate timeline, so they can never drift apart) — keeps the video fully
+   hidden, and inert (updateCoffeeVideo() doesn't scrub it until this and the
+   logo are both gone), for as long as the logo's still on screen. */
+.hero-coffee-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--color-surface);
+  opacity: 1;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 0;
+  transform-origin: center center;
+  will-change: transform, border-radius, opacity;
+}
+
+.hero-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 8, 6, 0.55) 0%,
+    rgba(10, 8, 6, 0.25) 35%,
+    rgba(10, 8, 6, 0.35) 65%,
+    rgba(6, 5, 4, 0.85) 100%
+  );
+}
+
+/* Hero scroll stage */
+.hero-stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 24px 64px;
+}
+
+.hero-copy {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.intro-block {
+  position: relative;
+  will-change: opacity, transform;
+}
+
+.intro-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  font-size: clamp(36px, 6.5vw, 68px);
+  letter-spacing: 0.01em;
+  color: var(--color-text);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* Premium letter-by-letter reveal, played once on load: each letter drifts
+   up out of a blur and its color deepens from a faint tint to full
+   --color-text, staggered by --i (set inline by hero-intro-reveal.js).
+   Forced ltr: on the Arabic page the surrounding text is RTL, and splitting
+   this English phrase into one inline-block span per letter breaks it out
+   of the single bidi run the browser would otherwise keep in order — each
+   span becomes its own box and gets reversed with the paragraph direction. */
+.intro-title-letters {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* One per word, wrapping that word's letter-spans — an atomic inline-block
+   box the line can only break BEFORE or AFTER, never inside, so a narrow
+   (mobile) viewport wraps the title between words instead of mid-word. */
+.intro-title-letters .intro-word {
+  display: inline-block;
+}
+
+.intro-title-letters .intro-letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(var(--from-y, 44px));
+  filter: blur(8px);
+  color: color-mix(in srgb, var(--color-text) 15%, transparent);
+  animation: intro-letter-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: calc(var(--i, 0) * 90ms + 0.3s);
+}
+
+.intro-title-letters .intro-letter-space {
+  display: inline-block;
+  width: 0.28em;
+}
+
+/* Alternating landing direction, set by hero-intro-reveal.js via --from-y:
+   every other letter drifts down into place from above the title, the rest
+   drift up into place from below — so the word visibly converges onto its
+   resting line from both sides instead of rising in as one flat block. */
+@keyframes intro-letter-in {
+  0% {
+    opacity: 0;
+    transform: translateY(var(--from-y, 44px));
+    filter: blur(8px);
+    color: color-mix(in srgb, var(--color-text) 15%, transparent);
+  }
+  55% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    color: var(--color-text);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-title-letters .intro-letter {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+    color: var(--color-text);
+  }
+}
+
+.intro-subtitle {
+  margin-top: 12px;
+  font-family: var(--font-ar);
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+
+.final-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.final-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.final-ar {
+  font-family: var(--font-ar);
+  font-weight: 700;
+  font-size: clamp(19px, 3.6vw, 40px);
+  color: var(--color-text);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* TDX logo mark — grows in from small/faint at the old headline's spot to
+   large/full-white at dead-center (driven from scroll-story.js), then later
+   flips from white to dark as the hero photo curtain lifts past it. Explicit
+   size here (not sized by children, which are all position:absolute) so it
+   reserves real space in .final-row's layout. */
+.tdx-wrap {
+  position: relative;
+  display: inline-block;
+  width: clamp(220px, 32vw, 420px);
+  aspect-ratio: 782.01 / 397.2;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Two layers, same clip-path flip trick as before: the plain white mark
+   (masked from one SVG so it can take currentColor) sits on top while
+   growing in, then the real multi-color logo underneath gets revealed via
+   clip-path as the hero photo curtain passes — swapping "white" for "full
+   brand color" instead of "white for dark ink".
+   Both source SVGs' viewBoxes are cropped to their real content bounding
+   box (measured directly — the drawn mark is identically sized in both
+   files, just sitting in canvases with different amounts of padding around
+   it), so both files now share one aspect ratio and read as the exact same
+   size at the same width — no more guessing a shared box from raw viewBox
+   dimensions that included different amounts of invisible margin. */
+.tdx-logo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  aspect-ratio: 782.01 / 397.2;
+  pointer-events: none;
+}
+
+.tdx-logo-light {
+  -webkit-mask-image: url('../../assets/icons/tdx-logo.svg');
+  mask-image: url('../../assets/icons/tdx-logo.svg');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  background-color: currentColor;
+  color: var(--color-text);
+  filter: drop-shadow(0 2px 24px rgba(0, 0, 0, 0.45));
+}
+
+.tdx-logo-color {
+  height: auto;
+  clip-path: inset(100% 0 0 0);
+  will-change: clip-path;
+}
+
+.cta-btn {
+  margin-top: 44px;
+  padding: 18px 44px;
+  border-radius: 12px;
+  background: rgba(20, 16, 14, 0.55);
+  border: 1px solid rgba(245, 241, 234, 0.25);
+  color: var(--color-text);
+  font-family: var(--font-ar);
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  opacity: 0;
+  pointer-events: auto;
+  backdrop-filter: blur(6px);
+  will-change: opacity, transform;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.cta-btn:hover {
+  border-color: var(--color-accent);
+  background: rgba(20, 16, 14, 0.75);
+}
+
+.hero-badge {
+  position: absolute;
+  left: 28px;
+  bottom: 28px;
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-text);
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  border: 2px solid var(--color-accent);
+}
+
+.hero-badge svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Story content: coffee "slide" -> zoom-in frame -> about "slide" — lives inside .hero-pin,
+   one continuous pin, so the thumbnail is already on screen with the coffee text. */
+.hero-coffee-text {
+  position: absolute;
+  z-index: 1;
+  left: 6%;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 520px;
+  /* Hidden until scroll-story.js fades it in — the mobile frosted-card
+     background below has fill of its own even before any of its text does,
+     so unlike the plain-text layers elsewhere in this pin it needs its own
+     opacity gate, not just its children's. */
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.coffee-title {
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(28px, 3.8vw, 44px);
+  line-height: 1.55;
+  color: var(--color-ink);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.coffee-subtitle {
+  margin-top: 20px;
+  font-family: var(--font-ar);
+  font-size: 19px;
+  line-height: 1.9;
+  color: var(--color-ink-muted);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.coffee-btn {
+  display: inline-block;
+  margin-top: 32px;
+  padding: 15px 38px;
+  border-radius: 8px;
+  background: var(--color-gold);
+  color: #fff;
+  font-family: var(--font-ar);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.coffee-btn:hover {
+  background: #a5762a;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  /* Cover crops this landscape-shot video down to a narrow vertical slice
+     on a tall phone screen — centered would cut the man (he's framed on
+     the right third of the source) out entirely. Biasing hard right keeps
+     him in frame — but he's full-height in that crop, so no text position
+     avoids overlapping him somewhere. A frosted card gives the copy its
+     own legible surface instead, same glass-panel treatment already used
+     elsewhere on the site (e.g. .value-card-label used to, .trust-stats
+     still does), rather than fighting the photo for contrast. */
+  .hero-coffee-video {
+    object-position: 85% center;
+  }
+
+  .hero-coffee-text {
+    left: 50%;
+    top: auto;
+    bottom: 4%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 88%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 22px 20px;
+    border-radius: 22px;
+    box-shadow: 0 16px 40px -12px rgba(20, 16, 14, 0.3);
+  }
+}
+
+/* Wipe into the process section — the final phase of this same pin, sitting
+   above .about-stage (z-index 4) so it sweeps over the settled about text.
+   Fully clipped (0% reveal) for every earlier phase, so it covers nothing
+   until the wipe phase actually starts. Direction-aware: grows from the left
+   in RTL (Arabic), from the right in LTR (English). Holds the intro AND the
+   4 cards together, stacked — everything lands on ONE screen, no separate
+   scroll segment needed to reach the cards. */
+.wipe-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(24px, 4vh, 48px);
+  padding: 90px 24px 32px;
+  background: var(--color-surface);
+  clip-path: inset(0 calc(100% - var(--reveal, 0%)) 0 0);
+  will-change: clip-path;
+}
+
+[dir="ltr"] .wipe-panel {
+  clip-path: inset(0 0 0 calc(100% - var(--reveal, 0%)));
+}
+
+/* Wipe into the values section — the LAST phase of this same pin, sitting
+   above .wipe-panel (z-index 5) so it sweeps over the settled process cards.
+   Same "everything on ONE screen, no separate scroll segment" rule as the
+   process wipe: heading + all 3 values live here together, sized to fit one
+   viewport. Solid brand-purple instead of ink on purpose — after a white
+   cards screen, another dark screen wouldn't read as a new beat at all. */
+.values-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 3.5vh, 40px);
+  padding: 90px 24px 32px;
+  background: var(--color-values-bg);
+  clip-path: inset(0 calc(100% - var(--reveal, 0%)) 0 0);
+  will-change: clip-path;
+}
+
+[dir="ltr"] .values-panel {
+  clip-path: inset(0 0 0 calc(100% - var(--reveal, 0%)));
+}
+
+/* Trust stats — the LAST phase of this same pin, sitting above .values-panel
+   (z-index 6). A deliberately different reveal shape from the two straight
+   curtains before it: an iris/circle wipe expanding from center (radius set
+   directly in px by scroll-story.js, not a --reveal custom property, since
+   the math needs the viewport diagonal). Background is the user-supplied
+   motion-blur portrait (assets/images/hero/trust-bg.jpg)
+   instead of a flat color — all the panel's own text is white to read on it
+   (see .trust-heading etc. in trust.css). */
+.trust-panel {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 90px 24px 60px;
+  background: #0d0a1a;
+  clip-path: circle(0px at 50% 48%);
+  will-change: clip-path;
+}
+
+/* The photo's subject sits on ITS right half, empty/dark on the left — which
+   is exactly where the text needs to land. Arabic text sits on the right
+   (RTL), so the image is mirrored by default to move that empty space over
+   there too; English text sits on the left, so [dir="ltr"] below un-mirrors
+   it back to the photo's original orientation. */
+.trust-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: url('../../assets/images/hero/trust-bg.jpg') center / cover no-repeat;
+  transform: scaleX(-1);
+}
+
+[dir="ltr"] .trust-panel::before {
+  transform: none;
+}

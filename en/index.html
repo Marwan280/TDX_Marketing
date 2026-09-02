@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TDX | The Destinations Experts</title>
+  <meta name="description" content="TDX | The Destinations Experts — a Saudi team building your visual identity, digital content, and marketing campaigns with a taste that understands your audience, their dialect, and the right timing.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#0b0d10">
+  <!-- TODO: replace example.com with the real site domain at launch -->
+  <link rel="canonical" href="https://example.com/en/">
+  <link rel="alternate" hreflang="ar" href="https://example.com/">
+  <link rel="alternate" hreflang="en" href="https://example.com/en/">
+  <link rel="alternate" hreflang="x-default" href="https://example.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:site_name" content="TDX | The Destinations Experts">
+  <meta property="og:title" content="TDX | The Destinations Experts">
+  <meta property="og:description" content="A Saudi team building your visual identity, digital content, and marketing campaigns with a taste that understands your audience, their dialect, and the right timing.">
+  <meta property="og:url" content="https://example.com/en/">
+  <meta property="og:image" content="https://example.com/assets/images/hero/hero-bg.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TDX | The Destinations Experts">
+  <meta name="twitter:description" content="A Saudi team building your visual identity, digital content, and marketing campaigns with a taste that understands your audience, their dialect, and the right timing.">
+  <meta name="twitter:image" content="https://example.com/assets/images/hero/hero-bg.png">
+
+  <link rel="icon" type="image/png" href="../assets/favicon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg">
+  <link rel="shortcut icon" href="../assets/favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="TDX">
+  <link rel="manifest" href="../assets/favicon/site.webmanifest">
+
+  <link rel="stylesheet" href="../css/base/variables.css">
+  <link rel="stylesheet" href="../css/base/fonts.css">
+  <link rel="stylesheet" href="../css/base/reset.css">
+  <link rel="stylesheet" href="../css/components/header.css">
+  <link rel="stylesheet" href="../css/sections/hero.css">
+  <link rel="stylesheet" href="../css/sections/about.css">
+  <link rel="stylesheet" href="../css/sections/process.css">
+  <link rel="stylesheet" href="../css/sections/values.css">
+  <link rel="stylesheet" href="../css/sections/trust.css">
+  <link rel="stylesheet" href="../css/sections/services.css">
+  <link rel="stylesheet" href="../css/sections/work.css">
+  <link rel="stylesheet" href="../css/sections/partners.css">
+  <link rel="stylesheet" href="../css/sections/closing.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "TDX",
+    "alternateName": "The Destinations Experts",
+    "description": "A Saudi team specialized in visual identity, video production, social media management, and marketing campaigns.",
+    "inLanguage": "en"
+  }
+  </script>
+</head>
+<body>
+
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <div class="header-brand">
+        <a href="#hero" class="header-logo" aria-label="TDX">
+          <span class="header-logo-mark"></span>
+        </a>
+      </div>
+      <div class="header-controls">
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+        </button>
+        <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+          <a href="#about">About Us</a>
+          <a href="#wipePanel">How We Work</a>
+          <a href="#work">Recent Work</a>
+          <a href="#services">Services</a>
+        </nav>
+        <a href="/" class="lang-switch" hreflang="ar" lang="ar">AR</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" id="hero" aria-labelledby="hero-heading">
+    <div class="hero-pin">
+      <div class="hero-coffee-media" id="heroCoffeeMedia">
+        <video
+          id="coffeeManVideo"
+          class="hero-coffee-video"
+          muted
+          playsinline
+          preload="auto"
+          poster="../assets/images/hero/coffee-man-poster.jpg"
+          aria-label="Saudi coffee host holding a dallah, pouring coffee"
+        >
+          <source src="../assets/video/coffee-man.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-coffee-overlay" id="heroCoffeeOverlay" aria-hidden="true"></div>
+      </div>
+
+      <div class="hero-media">
+        <video
+          id="heroVideo"
+          class="hero-bg"
+          muted
+          playsinline
+          preload="auto"
+          poster="../assets/images/hero/hero-poster.jpg"
+          aria-label="Riyadh at night"
+        >
+          <source src="../assets/video/hero.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-overlay"></div>
+      </div>
+
+      <div class="hero-stage">
+        <div class="hero-copy">
+
+          <div class="intro-block" id="introBlock">
+            <h1 class="intro-title" id="hero-heading" aria-label="The Destinations Experts">
+              <span class="intro-title-letters" id="introTitleLetters" aria-hidden="true">The Destinations Experts</span>
+            </h1>
+            <p class="intro-subtitle">One Vision</p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="final-wrap">
+        <div class="final-row" id="finalRow">
+          <span class="final-ar">Welcome to</span>
+          <span class="tdx-wrap" id="tdxWrap">
+            <span class="tdx-logo tdx-logo-light" id="tdxLogoLight" role="img" aria-label="TDX Marketing"></span>
+            <img class="tdx-logo tdx-logo-color" id="tdxLogoColor" src="../assets/icons/tdx-logo-color.svg" alt="" aria-hidden="true">
+          </span>
+        </div>
+        <a href="#" class="cta-btn" id="ctaBtn">Let's Grab a Coffee</a>
+      </div>
+
+      <a class="hero-badge" aria-disabled="true" aria-label="TDX">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/>
+          <circle cx="12" cy="10" r="2.4"/>
+        </svg>
+      </a>
+
+      <div class="hero-coffee-text" id="heroCoffeeText">
+        <h2 class="coffee-title">Let's grab a coffee… and talk about your project.</h2>
+        <p class="coffee-subtitle">There's nothing better than a cup of coffee to kick off a work conversation.</p>
+        <a href="#" class="coffee-btn">Pour Me a Cup</a>
+      </div>
+
+      <div class="zoom-frame" id="zoomFrame">
+        <video
+          id="officeVideo"
+          muted
+          playsinline
+          preload="auto"
+          poster="../assets/images/about/about-office-poster.jpg"
+          aria-label="TDX team in a work meeting"
+        >
+          <source src="../assets/video/office.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="about-overlay" id="aboutOverlay"></div>
+
+      <section class="about-stage" id="about" aria-labelledby="about-heading">
+        <div class="about-kicker" id="aboutKicker">
+          <span class="about-eyebrow">Before We Begin</span>
+          <h2 class="about-heading" id="about-heading">Let Me Tell You Who We Are</h2>
+        </div>
+
+        <div class="about-lines">
+          <div class="about-group about-group-right" id="aboutGroupRight">
+            <p class="about-line">TDX is a Saudi team that knows the market like the back of its hand.</p>
+            <p class="about-line">We don't work with ready-made templates and just paste your logo on top.</p>
+            <p class="about-line">We work with a taste that understands your audience, their dialect, and the right timing.</p>
+          </div>
+          <div class="about-group about-group-left" id="aboutGroupLeft">
+            <p class="about-line">Every project we take on, we treat as if it were our own.</p>
+            <p class="about-line">We don't see ourselves as just a service provider.</p>
+            <p class="about-line about-line-final">We see ourselves as a partner who thinks with you.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="wipe-panel" id="wipePanel" role="region" aria-labelledby="process-heading">
+        <div class="process-intro">
+          <span class="process-eyebrow">Before We Start Working</span>
+          <h2 class="process-heading" id="process-heading">And This Is Your Second Cup</h2>
+          <p class="process-subtitle">Because what's coming deserves a proper explanation, before we dive in.</p>
+        </div>
+
+        <div class="process-cards">
+          <article class="process-card">
+            <span class="process-card-number">01</span>
+            <div class="process-card-media" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4.5" width="18" height="12" rx="2.5"/><path d="M8 20l3.5-3.5"/></svg>
+            </div>
+            <h3 class="process-card-title">We Listen</h3>
+            <p class="process-card-desc">We talk it through until we understand your project, your goals, and every challenge you've faced.</p>
+          </article>
+
+          <article class="process-card">
+            <span class="process-card-number">02</span>
+            <div class="process-card-media" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.45 1 1.15 1 1.9V16h5v-.2c0-.75.4-1.45 1-1.9A6 6 0 0 0 12 3z"/></svg>
+            </div>
+            <h3 class="process-card-title">We Think</h3>
+            <p class="process-card-desc">We come up with out-of-the-box ideas that fit the Saudi market and suit your project.</p>
+          </article>
+
+          <article class="process-card">
+            <span class="process-card-number">03</span>
+            <div class="process-card-media" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1-1.5h7L16.5 7h2A1.5 1.5 0 0 1 20 8.5v9A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5v-9z"/><circle cx="12" cy="13" r="3.2"/></svg>
+            </div>
+            <h3 class="process-card-title">We Execute</h3>
+            <p class="process-card-desc">We launch the campaign or content with precision and speed.</p>
+          </article>
+
+          <article class="process-card">
+            <span class="process-card-number">04</span>
+            <div class="process-card-media" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10M10 20V4M16 20v-7M4 20h16"/></svg>
+            </div>
+            <h3 class="process-card-title">We Measure</h3>
+            <p class="process-card-desc">A clear report with the numbers — you'll know exactly where you spent and why.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="values-panel" id="valuesPanel" role="region" aria-labelledby="values-heading">
+        <div class="values-intro">
+          <span class="values-eyebrow">Our Principle Is Clear</span>
+          <h2 class="values-heading" id="values-heading">Let Me Give You the Bottom Line</h2>
+        </div>
+
+        <div class="values-track" id="valuesTrack">
+          <div class="values-strip" id="valuesStrip">
+            <article class="value-card">
+              <div class="value-card-media">
+                <img src="../assets/images/about/value-commitment.png" alt="Commitment">
+              </div>
+              <div class="value-card-label">
+                <span class="value-card-number">01</span>
+                <h3 class="value-card-title">Commitment</h3>
+                <p class="value-card-desc">We deliver every detail we agree on, on time and at the quality we promised — no delays, no excuses.</p>
+              </div>
+            </article>
+
+            <article class="value-card">
+              <div class="value-card-media">
+                <img src="../assets/images/about/value-innovation.png" alt="Innovation">
+              </div>
+              <div class="value-card-label">
+                <span class="value-card-number">02</span>
+                <h3 class="value-card-title">Innovation</h3>
+                <p class="value-card-desc">Every project is built from scratch around your brand and your audience — never a template we recycle.</p>
+              </div>
+            </article>
+
+            <article class="value-card">
+              <div class="value-card-media">
+                <img src="../assets/images/about/value-results.png" alt="Results">
+              </div>
+              <div class="value-card-label">
+                <span class="value-card-number">03</span>
+                <h3 class="value-card-title">Results</h3>
+                <p class="value-card-desc">We measure every step with clear numbers, doubling down on what works and refining what doesn't — continuously.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <div class="trust-panel" id="trustPanel" role="region" aria-labelledby="trust-heading">
+        <div class="trust-glow" aria-hidden="true">
+          <span class="trust-glow-blob trust-glow-blob-1"></span>
+          <span class="trust-glow-blob trust-glow-blob-2"></span>
+          <span class="trust-glow-blob trust-glow-blob-3"></span>
+        </div>
+
+        <div class="container trust-inner">
+          <div class="trust-intro" id="trustIntro">
+            <div class="trust-mask">
+              <h2 class="trust-heading" id="trust-heading">
+                We don't measure our success by how many cups we've poured
+              </h2>
+            </div>
+            <div class="trust-mask">
+              <p class="trust-subheading">We measure it in numbers.</p>
+            </div>
+          </div>
+
+          <div class="trust-stats" id="trustStats">
+            <div class="trust-stat">
+              <span class="trust-stat-number" data-value="98" data-suffix="%">0%</span>
+              <span class="trust-stat-label">of our clients come back to us</span>
+            </div>
+            <div class="trust-stat">
+              <span class="trust-stat-number" data-value="2" data-suffix="">0</span>
+              <span class="trust-stat-label">years in the Saudi market</span>
+            </div>
+            <div class="trust-stat">
+              <span class="trust-stat-number" data-value="30" data-suffix="M+">0M+</span>
+              <span class="trust-stat-label">views generated for our clients</span>
+            </div>
+            <div class="trust-stat">
+              <span class="trust-stat-number" data-value="40" data-suffix="+">0+</span>
+              <span class="trust-stat-label">brands who trusted us</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="services-section" id="services" aria-labelledby="services-heading">
+    <div class="services-intro" id="servicesIntro">
+      <div class="services-mask">
+        <h2 class="services-heading" id="services-heading">Let's Sweeten It a Bit More</h2>
+      </div>
+      <div class="services-mask">
+        <p class="services-subheading">Let's talk about what we can do for you.</p>
+      </div>
+    </div>
+
+    <div class="services-stack" id="servicesStack">
+      <article class="service-card">
+        <div class="service-card-pin">
+          <div class="service-card-bg has-photo" aria-hidden="true">
+            <img src="../assets/images/about/service-identity.png" alt="">
+          </div>
+          <div class="service-card-glow" aria-hidden="true"></div>
+          <span class="service-card-bignum" aria-hidden="true">01</span>
+          <div class="service-card-content">
+            <span class="service-card-count">01 / 08</span>
+            <div class="service-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="9" r="5"/><rect x="11" y="11" width="9" height="9" rx="2"/></svg>
+            </div>
+            <h3 class="service-card-title">We Build Your Identity</h3>
+            <p class="service-card-name">Visual Identity Design</p>
+            <p class="service-card-desc">We design your visual identity in a way that reflects your values and sets you apart from the competition.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="service-card">
+        <div class="service-card-pin">
+          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-glow" aria-hidden="true"></div>
+          <span class="service-card-bignum" aria-hidden="true">02</span>
+          <div class="service-card-content">
+            <span class="service-card-count">02 / 08</span>
+            <div class="service-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M4 17l5-5 3.5 3.5L17 10l3 3"/></svg>
+            </div>
+            <h3 class="service-card-title">We Create Your Content</h3>
+            <p class="service-card-name">Photography &amp; Video Production</p>
+            <p class="service-card-desc">Professional visual content that tells your project's story in a compelling way.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="service-card">
+        <div class="service-card-pin">
+          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-glow" aria-hidden="true"></div>
+          <span class="service-card-bignum" aria-hidden="true">03</span>
+          <div class="service-card-content">
+            <span class="service-card-count">03 / 08</span>
+            <div class="service-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8A2.5 2.5 0 0 1 17.5 16H10l-4 4v-4H6.5A2.5 2.5 0 0 1 4 13.5v-8z"/></svg>
+            </div>
+            <h3 class="service-card-title">We Manage Your Presence</h3>
+            <p class="service-card-name">Social Media Management</p>
+            <p class="service-card-desc">Full management of your social media accounts, end to end.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="service-card">
+        <div class="service-card-pin">
+          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-glow" aria-hidden="true"></div>
+          <span class="service-card-bignum" aria-hidden="true">04</span>
+          <div class="service-card-content">
+            <span class="service-card-count">04 / 08</span>
+            <div class="service-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 10v4h3l6 4V6l-6 4H3z"/><path d="M17 9a3.5 3.5 0 0 1 0 6"/><path d="M19.5 7a6.5 6.5 0 0 1 0 10"/></svg>
+            </div>
+            <h3 class="service-card-title">We Deliver Your Message</h3>
+            <p class="service-card-name">Advertising &amp; Influencer Marketing</p>
+            <p class="service-card-desc">Targeted ad campaigns and influencer collaborations.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="service-card">
+        <div class="service-card-pin">
+          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-glow" aria-hidden="true"></div>
+          <span class="service-card-bignum" aria-hidden="true">05</span>
+          <div class="service-card-content">
+            <span class="service-card-count">05 / 08</span>
+            <div class="service-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 9h18"/><circle cx="6.2" cy="7" r="0.6" fill="currentColor" stroke="none"/><circle cx="8.4" cy="7" r="0.6" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <h3 class="service-card-title">We Build Your Digital Experience</h3>
+            <p class="service-card-name">Websites &amp; Apps</p>
+            <p class="service-card-desc">Professional websites and apps that deliver an excellent user experience.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="service-card">
+        <div class="service-card-pin">
+          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-glow" aria-hidden="true"></div>
+          <span class="service-card-bignum" aria-hidden="true">06</span>
+          <div class="service-card-content">
+            <span class="service-card-count">06 / 08</span>
+            <div class="service-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.35-4.35"/></svg>
+            </div>
+            <h3 class="service-card-title">We Keep You Visible</h3>
+            <p class="service-card-name">SEO &amp; Search Presence</p>
+            <p class="service-card-desc">Improving your search engine visibility and reach on Google.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="service-card">
+        <div class="service-card-pin">
+          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-glow" aria-hidden="true"></div>
+          <span class="service-card-bignum" aria-hidden="true">07</span>
+          <div class="service-card-content">
+            <span class="service-card-count">07 / 08</span>
+            <div class="service-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/><path d="M18.5 15.5l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>
+            </div>
+            <h3 class="service-card-title">We Keep You Visible in the New Search</h3>
+            <p class="service-card-name">ChatGPT, Gemini &amp; Claude</p>
+            <p class="service-card-desc">Advanced visibility across AI platforms.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="service-card">
+        <div class="service-card-pin">
+          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-glow" aria-hidden="true"></div>
+          <span class="service-card-bignum" aria-hidden="true">08</span>
+          <div class="service-card-content">
+            <span class="service-card-count">08 / 08</span>
+            <div class="service-card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 17l5-5 3.5 3.5L20 8"/><path d="M14 8h6v6"/></svg>
+            </div>
+            <h3 class="service-card-title">We Grow Your Business</h3>
+            <p class="service-card-name">Business &amp; Project Development</p>
+            <p class="service-card-desc">Comprehensive growth strategies for sustainable success.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="services-progress" id="servicesProgress" aria-hidden="true">
+      <span class="services-progress-current" id="servicesProgressCurrent">01</span>
+      <span class="services-progress-track">
+        <span class="services-progress-fill" id="servicesProgressFill"></span>
+      </span>
+      <span class="services-progress-total">08</span>
+    </div>
+  </section>
+
+  <section class="work-section" id="work" aria-labelledby="work-heading">
+    <div class="work-intro" id="workIntro">
+      <div class="work-mask">
+        <h2 class="work-heading" id="work-heading">Ever Wonder Who's Had Coffee With Us?</h2>
+      </div>
+      <div class="work-mask">
+        <p class="work-subheading">A few brands we've made a real difference for.</p>
+      </div>
+
+      <div class="work-logos" aria-label="Other brands we've worked with">
+        <div class="work-logos-grid">
+          <div class="work-logo-tile" style="--i:0"><img src="../assets/images/work/96min.jpeg" alt="90min" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:1"><img src="../assets/images/work/travelMaker.jpeg" alt="Travel Maker" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:2"><img src="../assets/images/work/homyy.jpeg" alt="Homy Nursery Club" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:3"><img src="../assets/images/work/Balsam.jpeg" alt="Balsam Medical Centre" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:4"><img src="../assets/images/work/Raked.jpeg" alt="Raked" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:5"><img src="../assets/images/work/alshaya.webp" alt="Alshaya" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:6"><img src="../assets/images/work/eduquest.jpeg" alt="EduQuest" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:7"><img src="../assets/images/work/elite.jpeg" alt="Elite" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:8"><img src="../assets/images/work/elysian.jpeg" alt="Elysian" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:9"><img src="../assets/images/work/harth.jpeg" alt="Harth" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:10"><img src="../assets/images/work/husan.png" alt="Hisan Al-Taqniyat" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:11"><img src="../assets/images/work/khutaa.jpeg" alt="Khutaa" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:12"><img src="../assets/images/work/meccanno.jpeg" alt="Meccanno" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:13"><img src="../assets/images/work/nafes.png" alt="Nafes" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:14"><img src="../assets/images/work/rholNajd.jpeg" alt="Rhol Najd" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:15"><img src="../assets/images/work/seventySeven.jpeg" alt="Seventy Seven" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:16"><img src="../assets/images/work/shahm.jpeg" alt="Shahm" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:17"><img src="../assets/images/work/skyjewel.jpeg" alt="Sky Jewel" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-pin-outer" id="workPinOuter">
+      <div class="work-pin">
+        <div class="work-pin-glow" aria-hidden="true"></div>
+        <div class="work-pin-row">
+          <div class="work-marks" id="workMarks" aria-hidden="true">
+            <div class="work-mark work-mark-static is-slot-a"></div>
+            <div class="work-mark work-mark-static is-slot-b"></div>
+            <div class="work-mark" data-mark="0"><img class="work-mark-logo" src="../assets/images/work/96min.jpeg" alt="90min"></div>
+            <div class="work-mark" data-mark="1"><img class="work-mark-logo" src="../assets/images/work/travelMaker.jpeg" alt="Travel Maker"></div>
+            <div class="work-mark" data-mark="2"><img class="work-mark-logo" src="../assets/images/work/homyy.jpeg" alt="Homy Nursery"></div>
+          </div>
+
+          <div class="work-slides" id="workSlides">
+            <article class="work-slide" data-slide="0">
+              <span class="work-slide-client">90min</span>
+              <div class="work-slide-body">
+              <h3 class="work-card-title">Growing App Users</h3>
+
+              <div class="work-beats">
+                <div class="work-beat" data-beat="0">
+                  <span class="work-beat-label">Challenge</span>
+                  <p class="work-beat-text">90min's app was live in the market, but downloads weren't where they needed to be.</p>
+                </div>
+                <div class="work-beat" data-beat="1">
+                  <span class="work-beat-label">Action</span>
+                  <p class="work-beat-text">We worked together on a full marketing strategy focused on reaching the right audience and motivating them to download the app. Then we launched targeted ad campaigns and refined the messaging and customer journey.</p>
+                </div>
+                <div class="work-beat" data-beat="2">
+                  <span class="work-beat-label">Result</span>
+                  <p class="work-beat-text">Downloads grew from 1,800 a month to over 5,000.</p>
+                  <div class="work-stats">
+                    <div class="work-stat">
+                      <span class="work-stat-number" data-prefix="+" data-value="178" data-suffix="%">+0%</span>
+                      <span class="work-stat-label">app download growth</span>
+                    </div>
+                    <div class="work-stat">
+                      <span class="work-stat-number" data-prefix="+" data-value="150" data-suffix="%">+0%</span>
+                      <span class="work-stat-label">growth in orders</span>
+                    </div>
+                    <div class="work-stat">
+                      <span class="work-stat-number" data-value="4" data-suffix="x">0x</span>
+                      <span class="work-stat-label">ROAS</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="work-beat-dots" aria-hidden="true">
+                <span class="work-beat-dot" data-dot="0"></span>
+                <span class="work-beat-dot" data-dot="1"></span>
+                <span class="work-beat-dot" data-dot="2"></span>
+              </div>
+              </div>
+            </article>
+
+            <article class="work-slide" data-slide="1">
+              <span class="work-slide-client">Travel Maker</span>
+              <div class="work-slide-body">
+              <h3 class="work-card-title">Building a Visual Identity</h3>
+
+              <div class="work-beats">
+                <div class="work-beat" data-beat="0">
+                  <span class="work-beat-label">Challenge</span>
+                  <p class="work-beat-text">A travel company with big ambitions, but a visual identity that didn't reflect the experience it wanted to deliver.</p>
+                </div>
+                <div class="work-beat" data-beat="1">
+                  <span class="work-beat-label">Action</span>
+                  <p class="work-beat-text">We sat down to understand their direction and the audience they wanted to reach, then built a complete visual identity that captures the spirit of travel and makes the brand easier to recognize and remember.</p>
+                </div>
+                <div class="work-beat" data-beat="2">
+                  <span class="work-beat-label">Result</span>
+                  <p class="work-beat-text">A brand-new identity that set Travel Maker apart in its market.</p>
+                  <div class="work-stats">
+                    <div class="work-stat">
+                      <span class="work-stat-number" data-prefix="+" data-value="400" data-suffix="%">+0%</span>
+                      <span class="work-stat-label">growth in brand awareness</span>
+                    </div>
+                    <div class="work-stat">
+                      <span class="work-stat-number" data-value="5" data-suffix=" stars">0</span>
+                      <span class="work-stat-label">rating boost</span>
+                    </div>
+                    <div class="work-stat">
+                      <span class="work-stat-number" data-prefix="+" data-value="180" data-suffix="%">+0%</span>
+                      <span class="work-stat-label">growth in bookings</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="work-beat-dots" aria-hidden="true">
+                <span class="work-beat-dot" data-dot="0"></span>
+                <span class="work-beat-dot" data-dot="1"></span>
+                <span class="work-beat-dot" data-dot="2"></span>
+              </div>
+              </div>
+            </article>
+
+            <article class="work-slide" data-slide="2">
+              <span class="work-slide-client">Homy Nursery</span>
+              <div class="work-slide-body">
+              <h3 class="work-card-title">Growing Sales</h3>
+
+              <div class="work-beats">
+                <div class="work-beat" data-beat="0">
+                  <span class="work-beat-label">Challenge</span>
+                  <p class="work-beat-text">Homy Nursery wanted to reach more families, and turn the people who knew about them into actual sign-ups and sales.</p>
+                </div>
+                <div class="work-beat" data-beat="1">
+                  <span class="work-beat-label">Action</span>
+                  <p class="work-beat-text">We sat down with Homy and asked: what makes parents choose you? Then we built a strategy that reaches the right families at the right time, working on content and ads that put Homy clearly in front of parents.</p>
+                </div>
+                <div class="work-beat" data-beat="2">
+                  <span class="work-beat-label">Result</span>
+                  <p class="work-beat-text">More sign-ups, more sales, and stronger brand awareness among families.</p>
+                  <div class="work-stats">
+                    <div class="work-stat">
+                      <span class="work-stat-number" data-prefix="+" data-value="180" data-suffix="%">+0%</span>
+                      <span class="work-stat-label">growth in sign-ups</span>
+                    </div>
+                    <div class="work-stat">
+                      <span class="work-stat-number" data-prefix="+" data-value="150" data-suffix="%">+0%</span>
+                      <span class="work-stat-label">growth in sales</span>
+                    </div>
+                    <div class="work-stat">
+                      <span class="work-stat-number" data-prefix="+" data-value="300" data-suffix="%">+0%</span>
+                      <span class="work-stat-label">growth in brand awareness</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="work-beat-dots" aria-hidden="true">
+                <span class="work-beat-dot" data-dot="0"></span>
+                <span class="work-beat-dot" data-dot="1"></span>
+                <span class="work-beat-dot" data-dot="2"></span>
+              </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="partners-section" id="partners" aria-labelledby="partners-heading">
+    <div class="partners-glow" aria-hidden="true"></div>
+
+    <div class="partners-intro" id="partnersIntro">
+      <div class="partners-mask">
+        <h2 class="partners-heading" id="partners-heading">Let Me Introduce You To Our Crew</h2>
+      </div>
+      <div class="partners-mask">
+        <p class="partners-subheading">Not everyone with us is a partner — some are just part of how we work.</p>
+      </div>
+    </div>
+
+    <div class="partners-marquee" id="partnersMarquee">
+      <p class="sr-only">Logos of our crew and partners: Meta, Google, Snapchat, HubSpot, Salla, Tabby, Tamara, Zid, and Falak.</p>
+      <div class="partners-track" aria-hidden="true">
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/Meta.webp" alt="Meta" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/google.jpeg" alt="Google" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/Snapchat.webp" alt="Snapchat" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/hubSpot.png" alt="HubSpot" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/salla.png" alt="Salla" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/tabby.png" alt="Tabby" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/tamara.jpeg" alt="Tamara" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/zid.png" alt="Zid" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/falak.png" alt="Falak" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/Meta.webp" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/google.jpeg" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/Snapchat.webp" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/hubSpot.png" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/salla.png" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/tabby.png" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/tamara.jpeg" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/zid.png" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/falak.png" alt="" loading="lazy"></span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="closing-section" id="closing" aria-labelledby="closing-heading">
+    <div class="closing-media" id="closingMedia">
+      <video
+        id="closingVideo"
+        class="closing-photo"
+        muted
+        playsinline
+        preload="auto"
+        poster="../assets/images/footer/coffee-window-poster.jpg"
+        aria-label="A woman peeking through window blinds holding a cup of coffee"
+      >
+        <source src="../assets/video/coffee-window.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <div class="closing-content">
+      <div class="closing-mask">
+        <h2 class="closing-heading" id="closing-heading">What's Left? Come Say Hi...</h2>
+      </div>
+      <div class="closing-mask">
+        <p class="closing-subheading">Try our coffee in person, at our Riyadh office.</p>
+      </div>
+
+      <div class="closing-divider" id="closingDivider" aria-hidden="true"></div>
+
+      <div class="closing-socials" id="closingSocials">
+        <a class="closing-social" aria-disabled="true" aria-label="Email us" style="--i:0">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 4h15A2.5 2.5 0 0 1 22 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-15A2.5 2.5 0 0 1 2 17.5v-11A2.5 2.5 0 0 1 4.5 4zm.35 2.4a.55.55 0 0 0-.32.99l7.13 5.35a.55.55 0 0 0 .68 0l7.13-5.35a.55.55 0 0 0-.33-.99H4.85zM20 8.62l-7.02 5.27a1.6 1.6 0 0 1-1.96 0L4 8.62V17.5c0 .28.22.5.5.5h15a.5.5 0 0 0 .5-.5V8.62z"/></svg>
+        </a>
+        <a class="closing-social" aria-disabled="true" aria-label="WhatsApp" style="--i:1">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884M20.463 3.488A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>
+        </a>
+        <a class="closing-social" aria-disabled="true" aria-label="LinkedIn" style="--i:2">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124M7.119 20.452H3.555V9h3.564zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/></svg>
+        </a>
+        <a class="closing-social" aria-disabled="true" aria-label="Instagram" style="--i:3">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12s.014 3.668.072 4.948c.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24s3.668-.014 4.948-.072c4.354-.2 6.782-2.618 6.98-6.98.059-1.28.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.198-4.354-2.618-6.782-6.98-6.98C15.668.014 15.259 0 12 0m0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324M12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8m6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881"/></svg>
+        </a>
+        <a class="closing-social" aria-disabled="true" aria-label="X" style="--i:4">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="../js/main.js"></script>
+</body>
+</html>

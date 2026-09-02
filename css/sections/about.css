@@ -1,0 +1,147 @@
+/* .zoom-frame/.about-overlay/.about-stage all sit well above the hero's
+   own intro layer (.final-wrap etc. top out at z-index 2) and, unlike
+   .wipe-panel/.values-panel/.trust-panel further down this same pin, are
+   hidden purely via opacity rather than clip-path — opacity alone doesn't
+   remove an element from hit-testing, so even at opacity 0 they were
+   silently intercepting clicks meant for .cta-btn/.hero-badge underneath
+   throughout the whole intro. None of the three carry any interactive or
+   :hover content of their own, so pointer-events: none is safe here. */
+.zoom-frame {
+  position: absolute;
+  top: 86%;
+  left: 52%;
+  width: 170px;
+  height: 150px;
+  transform: translate(-50%, -50%);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.28);
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  will-change: width, height, top, left, border-radius, opacity;
+}
+
+.zoom-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.about-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 8, 6, 0.72) 0%,
+    rgba(10, 8, 6, 0.55) 40%,
+    rgba(10, 8, 6, 0.6) 70%,
+    rgba(6, 5, 4, 0.85) 100%
+  );
+}
+
+.about-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  padding: 14vh 6% 0;
+  pointer-events: none;
+}
+
+.about-kicker {
+  max-width: 640px;
+  margin-right: 0;
+  text-align: start;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* Secondary font (Cairo) as a subtle accent on this small kicker label —
+   everything else in the section stays on the primary Arabic font. */
+.about-eyebrow {
+  display: block;
+  font-family: var(--font-ar-secondary);
+  font-weight: 700;
+  font-size: clamp(14px, 1.6vw, 18px);
+  color: var(--color-gold);
+  letter-spacing: 0.02em;
+}
+
+.about-heading {
+  margin-top: 10px;
+  font-family: var(--font-ar);
+  font-weight: 800;
+  font-size: clamp(28px, 4vw, 46px);
+  color: var(--color-text);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
+}
+
+.about-lines {
+  position: relative;
+  width: 100%;
+  height: clamp(280px, 32vw, 380px);
+  margin-top: 6vh;
+}
+
+.about-group {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.about-group-right {
+  right: 0;
+  text-align: right;
+}
+
+.about-group-left {
+  left: 0;
+  text-align: left;
+}
+
+/* LTR (English): same reveal order and content, mirrored to the other physical
+   side — the group that appears first sits on the left instead of the right. */
+[dir="ltr"] .about-group-right {
+  right: auto;
+  left: 0;
+  text-align: left;
+}
+
+[dir="ltr"] .about-group-left {
+  left: auto;
+  right: 0;
+  text-align: right;
+}
+
+.about-line {
+  font-family: var(--font-ar);
+  font-weight: 600;
+  font-size: clamp(20px, 2.6vw, 32px);
+  line-height: 1.7;
+  color: var(--color-text);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.about-line-final {
+  font-weight: 800;
+  color: var(--color-gold);
+}
+
+@media (max-width: 768px) {
+  .about-kicker,
+  .about-line {
+    max-width: 100%;
+  }
+}
