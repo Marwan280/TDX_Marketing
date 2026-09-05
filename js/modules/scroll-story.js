@@ -1,6 +1,7 @@
 import { clamp01, easeInOut, easeOutBack, smoothstep } from '../utils/easing.js';
 import { createVideoScrubber } from '../utils/video-scrub.js';
 import { createStableViewport } from '../utils/stable-viewport.js';
+import { getScrollRoot } from '../utils/scroll-root.js';
 
 /**
  * Drives the single continuous pinned scroll sequence: hero intro -> TDX logo
@@ -15,6 +16,7 @@ export function initScrollStory() {
   // directly, so a mobile address-bar hide/show mid-scroll can't move the
   // goalposts on the whole pin's phase math.
   var viewport = createStableViewport();
+  var scrollRoot = getScrollRoot();
   var siteHeader = document.querySelector('.site-header');
   var hero = document.getElementById('hero');
   var heroMedia = hero.querySelector('.hero-media');
@@ -458,11 +460,18 @@ export function initScrollStory() {
       // .hero-coffee-overlay in hero.css.
       if (heroCoffeeOverlay) heroCoffeeOverlay.style.opacity = String(tdxOpacity);
 
-      // Image's own bottom edge in real viewport px, from its real transform
-      // (origin at center = 50vh). The color copy is clipped to reveal only
-      // below that line — no shadow/halo bleeding from the layer beneath.
+      // Image's own bottom edge in real viewport px. Read directly off
+      // heroMedia's own live layout (set just above, same tick) instead of
+      // reconstructing it from scale/liftY/viewport.height — that math
+      // assumed viewport.height (frozen at load, see stable-viewport.js)
+      // always matches the real current viewport, which mobile Safari's own
+      // toolbar quirks can throw off enough to visibly desync the reveal
+      // from where the image actually is. getBoundingClientRect() is always
+      // exactly right regardless of any of that. The color copy is clipped
+      // to reveal only below that line — no shadow/halo bleeding from the
+      // layer beneath.
       if (tdxLogoColor) {
-        var imageBottomPx = (50 + 50 * scale + liftY) * (viewport.height / 100);
+        var imageBottomPx = heroMedia ? heroMedia.getBoundingClientRect().bottom : 0;
         var colorRect = tdxLogoColor.getBoundingClientRect();
         var revealFromTop = imageBottomPx - colorRect.top;
         var revealPct = colorRect.height > 0 ? clamp01(revealFromTop / colorRect.height) * 100 : 0;
@@ -697,12 +706,12 @@ export function initScrollStory() {
   // because heroCoffeeText lives inside the sticky pin (not laid out at a
   // "real" document position an anchor jump could target) — this reuses the
   // exact same progress math update() reads scroll position through.
-  // scroll-behavior: smooth on html/body (reset.css) animates it for free.
+  // scroll-behavior: smooth on #scrollRoot (reset.css) animates it for free.
   if (ctaBtn) {
     ctaBtn.addEventListener('click', function (e) {
       e.preventDefault();
       var total = hero.offsetHeight - viewport.height;
-      if (total > 0) window.scrollTo({ top: HERO_FRACTION * total });
+      if (total > 0) scrollRoot.scrollTo({ top: HERO_FRACTION * total });
     });
   }
 
@@ -716,7 +725,7 @@ export function initScrollStory() {
   // scroll there directly instead of relying on the native anchor jump.
   function scrollToSectionProgress(sectionProgress) {
     var total = hero.offsetHeight - viewport.height;
-    if (total > 0) window.scrollTo({ top: sectionProgress * total });
+    if (total > 0) scrollRoot.scrollTo({ top: sectionProgress * total });
   }
 
   var aboutLink = document.querySelector('a[href="#about"]');
@@ -769,7 +778,8 @@ export function initScrollStory() {
     resizeTimer = setTimeout(init, 150);
   });
 
-  window.addEventListener('scroll', onScroll, { passive: true });
+  scrollRoot.addEventListener('scroll', onScroll, { passive: true });
+  scrollRoot.addEventListener('touchmove', onScroll, { passive: true });
   window.addEventListener('load', init);
 
   if (document.fonts && document.fonts.ready) {

@@ -8,42 +8,42 @@
 /* Arabic — Primary: IBM Plex Sans Arabic (200–700, no 800/900 shipped) */
 @font-face {
   font-family: 'IBM Plex Sans Arabic';
-  src: url('../../assets/fonts/IBMPlexSansArabic-ExtraLight.ttf') format('truetype');
+  src: url('../../assets/fonts/IBMPlexSansArabic-ExtraLight.woff2') format('woff2');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'IBM Plex Sans Arabic';
-  src: url('../../assets/fonts/IBMPlexSansArabic-Light.ttf') format('truetype');
+  src: url('../../assets/fonts/IBMPlexSansArabic-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'IBM Plex Sans Arabic';
-  src: url('../../assets/fonts/IBMPlexSansArabic-Regular.ttf') format('truetype');
+  src: url('../../assets/fonts/IBMPlexSansArabic-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'IBM Plex Sans Arabic';
-  src: url('../../assets/fonts/IBMPlexSansArabic-Medium.ttf') format('truetype');
+  src: url('../../assets/fonts/IBMPlexSansArabic-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'IBM Plex Sans Arabic';
-  src: url('../../assets/fonts/IBMPlexSansArabic-SemiBold.ttf') format('truetype');
+  src: url('../../assets/fonts/IBMPlexSansArabic-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'IBM Plex Sans Arabic';
-  src: url('../../assets/fonts/IBMPlexSansArabic-Bold.ttf') format('truetype');
+  src: url('../../assets/fonts/IBMPlexSansArabic-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -52,56 +52,56 @@
 /* Arabic — Secondary: Cairo (200–900, full set) */
 @font-face {
   font-family: 'Cairo';
-  src: url('../../assets/fonts/Cairo-ExtraLight.ttf') format('truetype');
+  src: url('../../assets/fonts/Cairo-ExtraLight.woff2') format('woff2');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Cairo';
-  src: url('../../assets/fonts/Cairo-Light.ttf') format('truetype');
+  src: url('../../assets/fonts/Cairo-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Cairo';
-  src: url('../../assets/fonts/Cairo-Regular.ttf') format('truetype');
+  src: url('../../assets/fonts/Cairo-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Cairo';
-  src: url('../../assets/fonts/Cairo-Medium.ttf') format('truetype');
+  src: url('../../assets/fonts/Cairo-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Cairo';
-  src: url('../../assets/fonts/Cairo-SemiBold.ttf') format('truetype');
+  src: url('../../assets/fonts/Cairo-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Cairo';
-  src: url('../../assets/fonts/Cairo-Bold.ttf') format('truetype');
+  src: url('../../assets/fonts/Cairo-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Cairo';
-  src: url('../../assets/fonts/Cairo-ExtraBold.ttf') format('truetype');
+  src: url('../../assets/fonts/Cairo-ExtraBold.woff2') format('woff2');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Cairo';
-  src: url('../../assets/fonts/Cairo-Black.ttf') format('truetype');
+  src: url('../../assets/fonts/Cairo-Black.woff2') format('woff2');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -110,42 +110,42 @@
 /* English — Primary: Poppins (200/300/500/700/800/900, no 400/600 shipped) */
 @font-face {
   font-family: 'Poppins';
-  src: url('../../assets/fonts/Poppins-ExtraLight.ttf') format('truetype');
+  src: url('../../assets/fonts/Poppins-ExtraLight.woff2') format('woff2');
   font-weight: 200;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Poppins';
-  src: url('../../assets/fonts/Poppins-Light.ttf') format('truetype');
+  src: url('../../assets/fonts/Poppins-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Poppins';
-  src: url('../../assets/fonts/Poppins-Medium.ttf') format('truetype');
+  src: url('../../assets/fonts/Poppins-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Poppins';
-  src: url('../../assets/fonts/Poppins-Bold.ttf') format('truetype');
+  src: url('../../assets/fonts/Poppins-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Poppins';
-  src: url('../../assets/fonts/Poppins-ExtraBold.ttf') format('truetype');
+  src: url('../../assets/fonts/Poppins-ExtraBold.woff2') format('woff2');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Poppins';
-  src: url('../../assets/fonts/Poppins-Black.ttf') format('truetype');
+  src: url('../../assets/fonts/Poppins-Black.woff2') format('woff2');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -154,7 +154,7 @@
 /* English — Secondary: Reey (single weight, display accent) */
 @font-face {
   font-family: 'Reey';
-  src: url('../../assets/fonts/Reey-Regular.otf') format('opentype');
+  src: url('../../assets/fonts/Reey-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;

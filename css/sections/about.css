@@ -68,7 +68,7 @@
   font-family: var(--font-ar-secondary);
   font-weight: 700;
   font-size: clamp(14px, 1.6vw, 18px);
-  color: var(--color-gold);
+  color: var(--color-teal);
   letter-spacing: 0.02em;
 }
 
@@ -136,7 +136,7 @@
 
 .about-line-final {
   font-weight: 800;
-  color: var(--color-gold);
+  color: var(--color-teal);
 }
 
 @media (max-width: 768px) {

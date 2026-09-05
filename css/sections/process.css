@@ -13,7 +13,7 @@
   font-family: var(--font-ar-secondary);
   font-weight: 700;
   font-size: clamp(13px, 1.5vw, 17px);
-  color: var(--color-gold);
+  color: var(--color-teal);
   letter-spacing: 0.02em;
 }
 
@@ -51,22 +51,23 @@
   right: 8%;
   top: 66px;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(185, 134, 47, 0.35) 15%, rgba(185, 134, 47, 0.35) 85%, transparent);
+  background: linear-gradient(to right, transparent, rgba(94, 234, 212, 0.35) 15%, rgba(94, 234, 212, 0.35) 85%, transparent);
   z-index: 0;
 }
 
 .process-card {
   position: relative;
   z-index: 1;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
   text-align: center;
   padding: 26px 18px 22px;
-  border-radius: 20px;
+  border-radius: 24px;
   border: 1px solid rgba(26, 26, 26, 0.08);
-  background: linear-gradient(180deg, rgba(185, 134, 47, 0.05), rgba(255, 255, 255, 0.6));
+  background: linear-gradient(180deg, rgba(94, 234, 212, 0.05), rgba(255, 255, 255, 0.6));
   box-shadow: 0 1px 3px rgba(20, 16, 14, 0.05);
   transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
   will-change: opacity, transform;
@@ -74,8 +75,72 @@
 
 .process-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(185, 134, 47, 0.45);
+  border-color: rgba(94, 234, 212, 0.45);
   box-shadow: 0 18px 34px rgba(20, 16, 14, 0.12);
+}
+
+/* Photo cards get a richer, deeper shadow + a teal-tinted border instead of
+   the plain flat ones above — the flat treatment was designed around the
+   pale gradient fallback, and reads as flimsy/generic sitting under an
+   actual photo. */
+.process-card:has(.process-card-bg.has-photo) {
+  border-color: rgba(94, 234, 212, 0.22);
+  box-shadow: 0 22px 44px -14px rgba(10, 6, 16, 0.55);
+}
+
+.process-card:has(.process-card-bg.has-photo):hover {
+  border-color: rgba(94, 234, 212, 0.55);
+  box-shadow: 0 30px 56px -12px rgba(10, 6, 16, 0.65);
+}
+
+/* Photo dropped in behind the card's existing content (icon, number, title,
+   desc) — same has-photo + dark-scrim pattern already used on
+   .service-card-bg, so nothing about the content itself has to change,
+   only its color once a photo sits behind it. */
+.process-card-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.process-card-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Graduated, not flat — lets more of the photo actually show through near
+   the top (where there's no text to protect) and only goes properly dark
+   toward the bottom, where the title/desc need it. Reads as a deliberate
+   photo treatment instead of just "a dark rectangle over a picture". */
+.process-card-bg.has-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 6, 16, 0.32) 0%, rgba(10, 6, 16, 0.5) 45%, rgba(10, 6, 16, 0.88) 100%);
+}
+
+/* Everything that already sat directly in .process-card (icon circle,
+   number, title, desc) moves into this wrapper unchanged — it exists only
+   to sit above .process-card-bg's z-index: 0 in the same stacking context,
+   not to alter spacing (same flex column + gap the card itself used). */
+.process-card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.process-card:has(.process-card-bg.has-photo) .process-card-title {
+  color: var(--color-text);
+}
+
+.process-card:has(.process-card-bg.has-photo) .process-card-desc {
+  color: rgba(245, 241, 234, 0.8);
 }
 
 /* Secondary font (Reey — script) as a deliberate accent: just these two
@@ -86,27 +151,9 @@
   font-family: var(--font-en-secondary);
   font-weight: 400;
   font-size: clamp(30px, 3vw, 40px);
-  color: var(--color-gold);
+  color: var(--color-teal);
   opacity: 0.7;
   line-height: 1;
-}
-
-.process-card-media {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: clamp(46px, 4.6vw, 56px);
-  height: clamp(46px, 4.6vw, 56px);
-  border-radius: 50%;
-  background: var(--color-surface);
-  border: 1.5px solid rgba(185, 134, 47, 0.4);
-  color: var(--color-gold);
-  box-shadow: 0 4px 12px rgba(185, 134, 47, 0.12);
-}
-
-.process-card-media svg {
-  width: 42%;
-  height: 42%;
 }
 
 .process-card-title {
@@ -130,19 +177,27 @@
   }
   .process-cards {
     grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
+    gap: 12px;
+  }
+
+  /* aspect-ratio ties each card's height to its own width instead of a
+     fixed px number — since both columns share the same width, that alone
+     makes all 4 land on the same height (fixing the earlier row-vs-row
+     mismatch) while also keeping the box close to square instead of the
+     tall min-height it had before, which was cropping these photos down
+     to a narrow sliver the same way the value-cards did. */
+  .process-card {
+    aspect-ratio: 1 / 1.15;
   }
 }
 
 @media (max-width: 560px) {
   .process-cards {
     grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
+    gap: 10px;
   }
   .process-card {
-    padding: 20px 14px 16px;
-  }
-  .process-card-desc {
-    display: none;
+    padding: 18px 12px 14px;
+    aspect-ratio: 1 / 1.1;
   }
 }

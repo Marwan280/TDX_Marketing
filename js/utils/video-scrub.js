@@ -20,12 +20,43 @@
 //    just because a seek was *issued* — so a timeout retry keeps re-firing
 //    the assignment every seekTimeoutMs until it genuinely lands, instead
 //    of giving up on the one target it was supposed to be chasing.
+// 3. iOS Safari never paints a frame for a `currentTime` seek issued
+//    against a video that hasn't actually played yet — every seek lands
+//    (currentTime updates, 'seeked' even fires) but the video element
+//    itself keeps showing nothing/black, no matter how many scroll ticks
+//    come in. This is what every "video doesn't work on my phone" report
+//    traced back to. A muted+playsinline video is allowed to autoplay via
+//    script with no user gesture, so play() immediately followed by
+//    pause() — before any seek is attempted — "primes" WebKit's decoder
+//    into a state where later currentTime assignments actually render.
+//    One-shot per video, safe to call before metadata has even loaded.
 export function createVideoScrubber(video, options) {
   var minDelta = (options && options.minDelta) || 1 / 30;
   var seekTimeoutMs = (options && options.seekTimeoutMs) || 300;
   var pending = false;
   var timeoutId = null;
   var latestTarget = null;
+  var primed = false;
+
+  function prime() {
+    if (primed) return;
+    primed = true;
+    var playResult = video.play();
+    if (playResult && typeof playResult.then === 'function') {
+      playResult
+        .then(function () {
+          video.pause();
+        })
+        .catch(function () {
+          // Autoplay blocked for some reason (not muted, stricter policy,
+          // etc.) — nothing was unlocked, so let a later real interaction
+          // (e.g. the coffee-man video's own click-to-play) prime it instead.
+          primed = false;
+        });
+    } else {
+      video.pause();
+    }
+  }
 
   function attemptSeek() {
     if (!video.duration || latestTarget === null) return;
@@ -47,6 +78,10 @@ export function createVideoScrubber(video, options) {
   }
 
   video.addEventListener('seeked', onSeekSettled);
+
+  // Primed as soon as the scrubber exists, not deferred to the first real
+  // seek — the very first scroll tick needs a frame to already be visible.
+  prime();
 
   // Call with a target time (seconds) on every scroll tick — internally
   // no-ops while a seek is still pending, so it's always safe to call

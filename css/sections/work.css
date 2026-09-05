@@ -11,6 +11,10 @@
 
 .work-section {
   position: relative;
+  /* So the nav's #work jump (see main.js's generic scrollIntoView handler)
+     settles below the fixed .site-header instead of tucking the section's
+     own top edge — and its heading with it — behind it. */
+  scroll-margin-top: 90px;
   background: var(--color-surface);
 }
 
@@ -305,7 +309,7 @@
   position: absolute;
   inset: 0 0 auto 0;
   width: 100%;
-  padding-top: clamp(56px, 8vh, 84px);
+  padding-top: clamp(104px, 15vh, 140px);
   opacity: 0;
   will-change: opacity, filter;
 }
@@ -313,10 +317,12 @@
 /* The client name sits flush at the true outer edge (no indent); the
    story below it (title, beats, stats) is indented in from THAT edge, so
    the name pokes out a bit further than everything under it instead of
-   lining up with it. */
+   lining up with it. top: 0 used to mean literally the pin's own top edge
+   — right where the fixed .site-header sits — so the name was rendering
+   hidden behind/under it instead of visible above the title. */
 .work-slide-client {
   position: absolute;
-  top: 0;
+  top: clamp(64px, 9vh, 90px);
   inset-inline-start: 0;
   font-family: var(--font-ar);
   font-weight: 800;
@@ -444,6 +450,12 @@
 
   .work-marks {
     align-self: center;
+    /* .work-slides reserves a tall min-height for its tallest beat variant
+       (see above), so once the actual text content is shorter than that,
+       .work-pin-row's own justify-content: center centers a taller empty
+       box than what's visually there — pulling the mark cluster up closes
+       that gap instead of leaving it centered under empty space. */
+    margin-top: -80px;
     width: clamp(160px, 42vw, 220px);
     height: clamp(160px, 42vw, 220px);
     flex: 0 0 auto;

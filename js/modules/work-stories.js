@@ -1,5 +1,6 @@
 import { clamp01, easeInOut, smoothstep } from '../utils/easing.js';
 import { createStableViewport } from '../utils/stable-viewport.js';
+import { getScrollRoot } from '../utils/scroll-root.js';
 
 /**
  * Section 8 (work / case studies): ONE pinned block (.work-pin) holding all
@@ -156,7 +157,8 @@ export function initWorkStories() {
     }
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
+  getScrollRoot().addEventListener('scroll', onScroll, { passive: true });
+  getScrollRoot().addEventListener('touchmove', onScroll, { passive: true });
   window.addEventListener('resize', update);
   window.addEventListener('load', update);
 

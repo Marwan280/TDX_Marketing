@@ -1,5 +1,6 @@
 import { clamp01, easeInOut } from '../utils/easing.js';
 import { createStableViewport } from '../utils/stable-viewport.js';
+import { getScrollRoot } from '../utils/scroll-root.js';
 
 /**
  * Section 9 ("خلّني أعرّفك على ربعنا" — crew/partner logos): a plain,
@@ -59,7 +60,8 @@ export function initPartnersReveal() {
     }
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
+  getScrollRoot().addEventListener('scroll', onScroll, { passive: true });
+  getScrollRoot().addEventListener('touchmove', onScroll, { passive: true });
   window.addEventListener('resize', updateIntro);
   window.addEventListener('load', updateIntro);
   updateIntro();

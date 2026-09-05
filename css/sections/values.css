@@ -145,7 +145,7 @@
   font-family: var(--font-en-secondary);
   font-weight: 400;
   font-size: clamp(15px, 1.6vw, 22px);
-  color: var(--color-gold);
+  color: var(--color-teal);
   opacity: 0.9;
   line-height: 1;
 }
@@ -180,5 +180,24 @@
      point, not replacing it. */
   .value-card-label {
     max-width: 78%;
+  }
+
+  /* Card size/ratio stays exactly as-is on mobile too (per the user — not
+     up for adjusting) — just the crop focus. Each photo's real subject
+     sits right-of-center, not dead center, so object-position: center
+     (values.css default, further up) was cropping straight through empty
+     background and clipping the actual subject (the handshake / the lead
+     paper plane pulling away from the pack / the arrow reaching its peak)
+     out of the narrow mobile card entirely. */
+  .value-card:nth-child(1) .value-card-media img {
+    object-position: 62% 45%;
+  }
+
+  .value-card:nth-child(2) .value-card-media img {
+    object-position: 75% 30%;
+  }
+
+  .value-card:nth-child(3) .value-card-media img {
+    object-position: 70% 25%;
   }
 }

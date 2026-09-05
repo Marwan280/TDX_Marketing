@@ -1,25 +1,33 @@
 /* Hero — height MUST match scroll-story.js's TOTAL_SCROLL_VH (hero + story +
    wipe + values + trust), or the phase fractions computed there assume more
    scrollable range than actually exists and the last phase(s) become
-   unreachable before their own progress ever hits 1. */
+   unreachable before their own progress ever hits 1.
+   html/body are locked (see #scrollRoot in reset.css) specifically so the
+   mobile address bar never auto-hides/shows mid-scroll and resizes vh out
+   from under this — that's what used to throw the TDX logo's color-reveal
+   (a fraction of this same height, see updateHeroVideo/update() in
+   scroll-story.js) out of sync with the video on phones. 1265vh stays as a
+   pre-JS fallback; --vh100 (set by stable-viewport.js from the same frozen
+   window.innerHeight every phase fraction in scroll-story.js is computed
+   against) takes over once JS runs, as a second layer of the same
+   guarantee in case anything else ever nudges window.innerHeight. */
 .hero {
   position: relative;
   width: 100%;
   height: 1265vh;
+  height: calc(var(--vh100, 1vh) * 1265);
 }
 
 .hero-pin {
   position: sticky;
   top: 0;
   width: 100%;
-  /* svh (small viewport height) instead of plain vh — on real mobile
-     browsers the address bar hides/shows as you scroll, so plain `vh`
-     keeps resizing this box mid-gesture and the scroll-progress math in
-     scroll-story.js (which reads window.innerHeight live) reads a moving
-     target, causing phases to visibly jump/overlap. svh always uses the
-     smallest possible viewport (chrome fully shown), so this box's own
-     size never changes during a scroll. Plain vh stays first as a fallback
-     for browsers that don't support svh yet. */
+  /* svh over plain vh purely for the older-browser fallback case (no JS, or
+     no #scrollRoot lock support) — with the address bar now permanently
+     pinned in every browser that DOES honor that lock, svh/vh/dvh would all
+     resolve to the same stable number anyway, so dvh's live-tracking has
+     nothing left to buy here and was dropped: it would only add back a
+     resize risk (some other UI nudging the real viewport) for zero benefit. */
   height: 100vh;
   height: 100svh;
   min-height: 640px;
@@ -378,7 +386,10 @@
   margin-top: 32px;
   padding: 15px 38px;
   border-radius: 8px;
-  background: var(--color-gold);
+  /* Darker than the site's shared --color-teal on purpose (just this
+     button, not the token) — the light version read as too washed-out
+     against this photo's pale background. */
+  background: #2dbfae;
   color: #fff;
   font-family: var(--font-ar);
   font-size: 15px;
@@ -390,21 +401,37 @@
 }
 
 .coffee-btn:hover {
-  background: #a5762a;
+  background: #1f9c8e;
   transform: translateY(-1px);
 }
 
 @media (max-width: 900px) {
+  /* Riyadh skyline shot: the Kingdom Tower itself sits at roughly the
+     27%-from-left mark of the source frame, not centered — a `cover` crop
+     on a tall phone viewport is narrow enough (well under a third of the
+     source width) that a plain center anchor misses the tower completely
+     and shows dead sky plus unrelated background buildings instead.
+     Biasing the anchor to the tower's own real position keeps it in frame
+     at every scroll-scrubbed timestamp (checked across the clip — the shot
+     is a static wide angle, so the tower never drifts). */
+  .hero-bg {
+    object-position: 27% center;
+  }
+
   /* Cover crops this landscape-shot video down to a narrow vertical slice
-     on a tall phone screen — centered would cut the man (he's framed on
-     the right third of the source) out entirely. Biasing hard right keeps
-     him in frame — but he's full-height in that crop, so no text position
-     avoids overlapping him somewhere. A frosted card gives the copy its
-     own legible surface instead, same glass-panel treatment already used
-     elsewhere on the site (e.g. .value-card-label used to, .trust-stats
-     still does), rather than fighting the photo for contrast. */
+     on a tall phone screen — even biased hard right toward the man, that
+     slice isn't wide enough to also fit the table/chair beside him, which
+     is why they used to be cropped out entirely. `contain` shows the whole
+     studio composition (man, table, chair together) instead, letterboxed
+     top/bottom against a background colour sampled straight off the
+     video's own backdrop so the letterbox reads as more of the same set
+     rather than a visible seam. */
+  .hero-coffee-media {
+    background-color: #e8e6e7;
+  }
+
   .hero-coffee-video {
-    object-position: 85% center;
+    object-fit: contain;
   }
 
   .hero-coffee-text {

@@ -2,6 +2,24 @@
 <html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
+  <!-- Must run before the browser has a chance to apply its own scroll
+       restoration on a back/forward (or bfcache) navigation — a deferred
+       module script near the end of the page runs too late, after that
+       restore already happened. The whole hero->about->process->values->
+       trust sequence is one very tall pinned scroll container (see
+       scroll-story.js), so a restored mid-page scrollY can land anywhere
+       inside it — e.g. deep in the "about" zoom-frame video, fullscreen,
+       with no text yet — instead of the hero's own start. This makes every
+       open of the page (aside from a real deep link like #services) start
+       from the actual top, same as a first-ever visit. -->
+  <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    if (!window.location.hash) {
+      window.scrollTo(0, 0);
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TDX | The Destinations Experts</title>
   <meta name="description" content="TDX | The Destinations Experts — a Saudi team building your visual identity, digital content, and marketing campaigns with a taste that understands your audience, their dialect, and the right timing.">
@@ -20,13 +38,13 @@
   <meta property="og:title" content="TDX | The Destinations Experts">
   <meta property="og:description" content="A Saudi team building your visual identity, digital content, and marketing campaigns with a taste that understands your audience, their dialect, and the right timing.">
   <meta property="og:url" content="https://example.com/en/">
-  <meta property="og:image" content="https://example.com/assets/images/hero/hero-bg.png">
+  <meta property="og:image" content="https://example.com/assets/images/hero/hero-bg.jpg">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="TDX | The Destinations Experts">
   <meta name="twitter:description" content="A Saudi team building your visual identity, digital content, and marketing campaigns with a taste that understands your audience, their dialect, and the right timing.">
-  <meta name="twitter:image" content="https://example.com/assets/images/hero/hero-bg.png">
+  <meta name="twitter:image" content="https://example.com/assets/images/hero/hero-bg.jpg">
 
   <link rel="icon" type="image/png" href="../assets/favicon/favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="../assets/favicon/favicon.svg">
@@ -70,11 +88,6 @@
         </a>
       </div>
       <div class="header-controls">
-        <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
-          <span class="nav-toggle-bar"></span>
-          <span class="nav-toggle-bar"></span>
-          <span class="nav-toggle-bar"></span>
-        </button>
         <nav class="main-nav" id="mainNav" aria-label="Main navigation">
           <a href="#about">About Us</a>
           <a href="#wipePanel">How We Work</a>
@@ -86,7 +99,8 @@
     </div>
   </header>
 
-  <section class="hero" id="hero" aria-labelledby="hero-heading">
+  <div id="scrollRoot">
+  <section class="hero" id="hero" aria-labelledby="hero-heading" data-bar="dark">
     <div class="hero-pin">
       <div class="hero-coffee-media" id="heroCoffeeMedia">
         <video
@@ -94,7 +108,7 @@
           class="hero-coffee-video"
           muted
           playsinline
-          preload="auto"
+          preload="metadata"
           poster="../assets/images/hero/coffee-man-poster.jpg"
           aria-label="Saudi coffee host holding a dallah, pouring coffee"
         >
@@ -160,7 +174,7 @@
           id="officeVideo"
           muted
           playsinline
-          preload="auto"
+          preload="metadata"
           poster="../assets/images/about/about-office-poster.jpg"
           aria-label="TDX team in a work meeting"
         >
@@ -198,39 +212,47 @@
 
         <div class="process-cards">
           <article class="process-card">
-            <span class="process-card-number">01</span>
-            <div class="process-card-media" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4.5" width="18" height="12" rx="2.5"/><path d="M8 20l3.5-3.5"/></svg>
+            <div class="process-card-bg has-photo" aria-hidden="true">
+              <img src="../assets/images/about/process-listen.webp" alt="" loading="lazy">
             </div>
-            <h3 class="process-card-title">We Listen</h3>
-            <p class="process-card-desc">We talk it through until we understand your project, your goals, and every challenge you've faced.</p>
+            <div class="process-card-content">
+              <span class="process-card-number">01</span>
+              <h3 class="process-card-title">We Listen</h3>
+              <p class="process-card-desc">We talk it through until we understand your project, your goals, and every challenge you've faced.</p>
+            </div>
           </article>
 
           <article class="process-card">
-            <span class="process-card-number">02</span>
-            <div class="process-card-media" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.45 1 1.15 1 1.9V16h5v-.2c0-.75.4-1.45 1-1.9A6 6 0 0 0 12 3z"/></svg>
+            <div class="process-card-bg has-photo" aria-hidden="true">
+              <img src="../assets/images/about/process-think.webp" alt="" loading="lazy">
             </div>
-            <h3 class="process-card-title">We Think</h3>
-            <p class="process-card-desc">We come up with out-of-the-box ideas that fit the Saudi market and suit your project.</p>
+            <div class="process-card-content">
+              <span class="process-card-number">02</span>
+              <h3 class="process-card-title">We Think</h3>
+              <p class="process-card-desc">We come up with out-of-the-box ideas that fit the Saudi market and suit your project.</p>
+            </div>
           </article>
 
           <article class="process-card">
-            <span class="process-card-number">03</span>
-            <div class="process-card-media" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1-1.5h7L16.5 7h2A1.5 1.5 0 0 1 20 8.5v9A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5v-9z"/><circle cx="12" cy="13" r="3.2"/></svg>
+            <div class="process-card-bg has-photo" aria-hidden="true">
+              <img src="../assets/images/about/process-execute.webp" alt="" loading="lazy">
             </div>
-            <h3 class="process-card-title">We Execute</h3>
-            <p class="process-card-desc">We launch the campaign or content with precision and speed.</p>
+            <div class="process-card-content">
+              <span class="process-card-number">03</span>
+              <h3 class="process-card-title">We Execute</h3>
+              <p class="process-card-desc">We launch the campaign or content with precision and speed.</p>
+            </div>
           </article>
 
           <article class="process-card">
-            <span class="process-card-number">04</span>
-            <div class="process-card-media" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20V10M10 20V4M16 20v-7M4 20h16"/></svg>
+            <div class="process-card-bg has-photo" aria-hidden="true">
+              <img src="../assets/images/about/process-measure.webp" alt="" loading="lazy">
             </div>
-            <h3 class="process-card-title">We Measure</h3>
-            <p class="process-card-desc">A clear report with the numbers — you'll know exactly where you spent and why.</p>
+            <div class="process-card-content">
+              <span class="process-card-number">04</span>
+              <h3 class="process-card-title">We Measure</h3>
+              <p class="process-card-desc">A clear report with the numbers — you'll know exactly where you spent and why.</p>
+            </div>
           </article>
         </div>
       </div>
@@ -245,7 +267,7 @@
           <div class="values-strip" id="valuesStrip">
             <article class="value-card">
               <div class="value-card-media">
-                <img src="../assets/images/about/value-commitment.png" alt="Commitment">
+                <img src="../assets/images/about/value-commitment.webp" alt="Commitment" loading="lazy">
               </div>
               <div class="value-card-label">
                 <span class="value-card-number">01</span>
@@ -256,7 +278,7 @@
 
             <article class="value-card">
               <div class="value-card-media">
-                <img src="../assets/images/about/value-innovation.png" alt="Innovation">
+                <img src="../assets/images/about/value-innovation.webp" alt="Innovation" loading="lazy">
               </div>
               <div class="value-card-label">
                 <span class="value-card-number">02</span>
@@ -267,7 +289,7 @@
 
             <article class="value-card">
               <div class="value-card-media">
-                <img src="../assets/images/about/value-results.png" alt="Results">
+                <img src="../assets/images/about/value-results.webp" alt="Results" loading="lazy">
               </div>
               <div class="value-card-label">
                 <span class="value-card-number">03</span>
@@ -332,10 +354,10 @@
     </div>
 
     <div class="services-stack" id="servicesStack">
-      <article class="service-card">
+      <article class="service-card" data-bar="light">
         <div class="service-card-pin">
           <div class="service-card-bg has-photo" aria-hidden="true">
-            <img src="../assets/images/about/service-identity.png" alt="">
+            <img src="../assets/images/about/service-identity.webp" alt="" loading="lazy">
           </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">01</span>
@@ -351,9 +373,11 @@
         </div>
       </article>
 
-      <article class="service-card">
+      <article class="service-card" data-bar="light">
         <div class="service-card-pin">
-          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-bg has-photo" aria-hidden="true">
+            <img src="../assets/images/about/service-content.webp" alt="" loading="lazy">
+          </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">02</span>
           <div class="service-card-content">
@@ -368,9 +392,11 @@
         </div>
       </article>
 
-      <article class="service-card">
+      <article class="service-card" data-bar="light">
         <div class="service-card-pin">
-          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-bg has-photo" aria-hidden="true">
+            <img src="../assets/images/about/service-social.webp" alt="" loading="lazy">
+          </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">03</span>
           <div class="service-card-content">
@@ -385,9 +411,11 @@
         </div>
       </article>
 
-      <article class="service-card">
+      <article class="service-card" data-bar="light">
         <div class="service-card-pin">
-          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-bg has-photo" aria-hidden="true">
+            <img src="../assets/images/about/service-campaigns.webp" alt="" loading="lazy">
+          </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">04</span>
           <div class="service-card-content">
@@ -402,9 +430,11 @@
         </div>
       </article>
 
-      <article class="service-card">
+      <article class="service-card" data-bar="dark">
         <div class="service-card-pin">
-          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-bg has-photo" aria-hidden="true">
+            <img src="../assets/images/about/service-web.webp" alt="" loading="lazy">
+          </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">05</span>
           <div class="service-card-content">
@@ -419,9 +449,11 @@
         </div>
       </article>
 
-      <article class="service-card">
+      <article class="service-card" data-bar="dark">
         <div class="service-card-pin">
-          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-bg has-photo" aria-hidden="true">
+            <img src="../assets/images/about/service-seo.webp" alt="" loading="lazy">
+          </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">06</span>
           <div class="service-card-content">
@@ -436,9 +468,11 @@
         </div>
       </article>
 
-      <article class="service-card">
+      <article class="service-card" data-bar="dark">
         <div class="service-card-pin">
-          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-bg has-photo" aria-hidden="true">
+            <img src="../assets/images/about/service-ai-search.webp" alt="" loading="lazy">
+          </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">07</span>
           <div class="service-card-content">
@@ -453,9 +487,11 @@
         </div>
       </article>
 
-      <article class="service-card">
+      <article class="service-card" data-bar="dark">
         <div class="service-card-pin">
-          <div class="service-card-bg" aria-hidden="true"></div>
+          <div class="service-card-bg has-photo" aria-hidden="true">
+            <img src="../assets/images/about/service-growth.webp" alt="" loading="lazy">
+          </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">08</span>
           <div class="service-card-content">
@@ -480,7 +516,7 @@
     </div>
   </section>
 
-  <section class="work-section" id="work" aria-labelledby="work-heading">
+  <section class="work-section" id="work" aria-labelledby="work-heading" data-bar="light">
     <div class="work-intro" id="workIntro">
       <div class="work-mask">
         <h2 class="work-heading" id="work-heading">Ever Wonder Who's Had Coffee With Us?</h2>
@@ -501,10 +537,10 @@
           <div class="work-logo-tile" style="--i:7"><img src="../assets/images/work/elite.jpeg" alt="Elite" loading="lazy"></div>
           <div class="work-logo-tile" style="--i:8"><img src="../assets/images/work/elysian.jpeg" alt="Elysian" loading="lazy"></div>
           <div class="work-logo-tile" style="--i:9"><img src="../assets/images/work/harth.jpeg" alt="Harth" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:10"><img src="../assets/images/work/husan.png" alt="Hisan Al-Taqniyat" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:10"><img src="../assets/images/work/husan.webp" alt="Hisan Al-Taqniyat" loading="lazy"></div>
           <div class="work-logo-tile" style="--i:11"><img src="../assets/images/work/khutaa.jpeg" alt="Khutaa" loading="lazy"></div>
           <div class="work-logo-tile" style="--i:12"><img src="../assets/images/work/meccanno.jpeg" alt="Meccanno" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:13"><img src="../assets/images/work/nafes.png" alt="Nafes" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:13"><img src="../assets/images/work/nafes.webp" alt="Nafes" loading="lazy"></div>
           <div class="work-logo-tile" style="--i:14"><img src="../assets/images/work/rholNajd.jpeg" alt="Rhol Najd" loading="lazy"></div>
           <div class="work-logo-tile" style="--i:15"><img src="../assets/images/work/seventySeven.jpeg" alt="Seventy Seven" loading="lazy"></div>
           <div class="work-logo-tile" style="--i:16"><img src="../assets/images/work/shahm.jpeg" alt="Shahm" loading="lazy"></div>
@@ -657,7 +693,7 @@
     </div>
   </section>
 
-  <section class="partners-section" id="partners" aria-labelledby="partners-heading">
+  <section class="partners-section" id="partners" aria-labelledby="partners-heading" data-bar="light">
     <div class="partners-glow" aria-hidden="true"></div>
 
     <div class="partners-intro" id="partnersIntro">
@@ -675,33 +711,33 @@
         <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/Meta.webp" alt="Meta" loading="lazy"></span>
         <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/google.jpeg" alt="Google" loading="lazy"></span>
         <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/Snapchat.webp" alt="Snapchat" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/hubSpot.png" alt="HubSpot" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/hubSpot.webp" alt="HubSpot" loading="lazy"></span>
         <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/salla.png" alt="Salla" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/tabby.png" alt="Tabby" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/tabby.webp" alt="Tabby" loading="lazy"></span>
         <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/tamara.jpeg" alt="Tamara" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/zid.png" alt="Zid" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/falak.png" alt="Falak" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/zid.webp" alt="Zid" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/falak.webp" alt="Falak" loading="lazy"></span>
         <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/Meta.webp" alt="" loading="lazy"></span>
         <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/google.jpeg" alt="" loading="lazy"></span>
         <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/Snapchat.webp" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/hubSpot.png" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/hubSpot.webp" alt="" loading="lazy"></span>
         <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/salla.png" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/tabby.png" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/tabby.webp" alt="" loading="lazy"></span>
         <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/tamara.jpeg" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/zid.png" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/falak.png" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/zid.webp" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/falak.webp" alt="" loading="lazy"></span>
       </div>
     </div>
   </section>
 
-  <footer class="closing-section" id="closing" aria-labelledby="closing-heading">
+  <footer class="closing-section" id="closing" aria-labelledby="closing-heading" data-bar="light">
     <div class="closing-media" id="closingMedia">
       <video
         id="closingVideo"
         class="closing-photo"
         muted
         playsinline
-        preload="auto"
+        preload="metadata"
         poster="../assets/images/footer/coffee-window-poster.jpg"
         aria-label="A woman peeking through window blinds holding a cup of coffee"
       >
@@ -738,6 +774,7 @@
       </div>
     </div>
   </footer>
+  </div>
 
   <script type="module" src="../js/main.js"></script>
 </body>

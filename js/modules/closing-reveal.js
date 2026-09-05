@@ -1,6 +1,7 @@
 import { clamp01, easeInOut } from '../utils/easing.js';
 import { createVideoScrubber } from '../utils/video-scrub.js';
 import { createStableViewport } from '../utils/stable-viewport.js';
+import { getScrollRoot } from '../utils/scroll-root.js';
 
 /**
  * Closing/footer CTA: the last section on the page, so — same reasoning as
@@ -72,7 +73,8 @@ export function initClosingReveal() {
     }
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
+  getScrollRoot().addEventListener('scroll', onScroll, { passive: true });
+  getScrollRoot().addEventListener('touchmove', onScroll, { passive: true });
   window.addEventListener('resize', updateHeading);
   window.addEventListener('load', updateHeading);
   updateHeading();

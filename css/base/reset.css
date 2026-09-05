@@ -4,10 +4,29 @@
   box-sizing: border-box;
 }
 
+/* #scrollRoot (below) is the one element anything on this page treats as
+   "the scroll" — every module's scroll math, every position: sticky pin.
+   html/body are fully locked (no scroll capability at all, not even a
+   token 1px) — an earlier attempt gave html 1px of real scroll specifically
+   to nudge Safari's toolbar into its compact state, but a genuinely
+   scrollable document (even by 1px) is enough for iOS to occasionally
+   read an overscroll gesture as a pull-to-refresh and reload the page mid-
+   scroll — worse than the tall-toolbar cosmetic issue it was solving. */
 html, body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-ar);
+}
+
+#scrollRoot {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
   scroll-behavior: smooth;
 }
 
