@@ -6,12 +6,14 @@ import { getScrollRoot } from '../utils/scroll-root.js';
  * Section 8 (work / case studies): ONE pinned block (.work-pin) holding all
  * 3 case studies stacked on top of each other — moving between them is a
  * pure crossfade, nothing ever slides vertically. The pin's own scroll
- * range (.work-pin-outer's height) splits into 3 equal thirds, one per
- * case study; each third further splits into 3 beats (challenge -> action
- * -> result), exactly like before, just re-anchored to a shared progress
- * number instead of each card's own rect. The client-mark cluster on the
- * side reshuffles in lockstep: whichever case study is active gets the
- * front slot, the other two recede to mid/back — a small deck of cards.
+ * range (.work-pin-outer's height) splits into 3 equal thirds, one per case
+ * study. Each case study's own challenge/action/result now render together
+ * (see .work-beats in work.css) instead of the old sequential per-beat
+ * reveal — that was 3 scroll-triggered beats times 3 companies, which read
+ * as a long slog. Scroll now only drives the crossfade FROM ONE COMPANY TO
+ * THE NEXT. The client-mark cluster on the side reshuffles in lockstep:
+ * whichever case study is active gets the front slot, the other two recede
+ * to mid/back — a small deck of cards.
  */
 export function initWorkStories() {
   var section = document.getElementById('work');
@@ -32,13 +34,9 @@ export function initWorkStories() {
   var markEls = Array.prototype.slice.call(section.querySelectorAll('.work-mark[data-mark]'));
 
   var slides = slideEls.map(function (slide) {
-    var beats = Array.prototype.slice.call(slide.querySelectorAll('.work-beat'));
-    var dots = Array.prototype.slice.call(slide.querySelectorAll('.work-beat-dot'));
     var statEls = Array.prototype.slice.call(slide.querySelectorAll('.work-stat-number'));
     return {
       el: slide,
-      beats: beats,
-      dots: dots,
       stats: statEls.map(function (el) {
         return {
           el: el,
@@ -97,25 +95,12 @@ export function initWorkStories() {
       slide.el.style.filter = 'blur(' + (1 - slideO) * 5 + 'px)';
       slide.el.style.pointerEvents = si === activeIndex ? 'auto' : 'none';
 
-      // Local progress within this slide's own third, used for its beats —
-      // only meaningful while it's the active (or crossfading) slide.
-      var localP = clamp01(p * slideCount - si);
-      var beatCount = slide.beats.length || 1;
-
-      slide.beats.forEach(function (beatEl, bi) {
-        var o = bandOpacity(localP, bi, beatCount, 0.08);
-        beatEl.style.opacity = String(o);
-        beatEl.style.transform = 'translateY(' + (1 - o) * 16 + 'px)';
-        beatEl.style.filter = 'blur(' + (1 - o) * 4 + 'px)';
-      });
-
-      var activeBeat = Math.min(beatCount - 1, Math.floor(localP * beatCount));
-      slide.dots.forEach(function (dot, di) {
-        dot.classList.toggle('is-active', di === activeBeat);
-      });
-
-      var lastSeg = (beatCount - 1) / beatCount;
-      var statsP = easeInOut(clamp01((localP - lastSeg) / (1 / beatCount)));
+      // Stats count up together as this slide settles into view — all 3
+      // beats (challenge/action/result) are already visible together (see
+      // .work-beats in work.css), so there's no more "result beat's own
+      // turn" to wait for; slideO itself (how faded-in this card is) is
+      // the only progress signal left to drive them from.
+      var statsP = easeInOut(clamp01((slideO - 0.4) / 0.6));
       var step = slide.stats.length ? 1 / slide.stats.length : 1;
       slide.stats.forEach(function (stat, i2) {
         var raw = clamp01((statsP - i2 * step * 0.4) / (1 - i2 * step * 0.4));

@@ -130,17 +130,16 @@
   }
 }
 
-/* The pin: one continuous scroll range (450vh, set inline via nothing —
-   see .work-pin-outer height below) split into 3 equal thirds, one per
-   case study — 150vh each, ~50vh per beat (challenge/action/result), in
-   line with the ~35-45vh/beat pace the other pinned sections (services
-   cards, hero's process/values cards) already use. Was 900vh (100vh/beat)
-   until that made this section feel noticeably slower to scroll through
-   than everything around it. Nothing here ever moves the pin itself —
-   only the slide crossfade and the mark-stack respond to scroll. */
+/* The pin: one continuous scroll range split into 3 equal thirds, one per
+   case study. Each third used to itself split into 3 beats (challenge ->
+   action -> result) at 150vh/company — now that all 3 beats render
+   together (see .work-beats above) there's nothing left to page through
+   within a company, only the crossfade TO the next one, so 100vh/company
+   is plenty (down from 450vh total). Nothing here ever moves the pin
+   itself — only the slide crossfade and the mark-stack respond to scroll. */
 .work-pin-outer {
   position: relative;
-  height: 450vh;
+  height: 300vh;
 }
 
 .work-pin {
@@ -231,16 +230,6 @@
   will-change: transform, opacity;
 }
 
-.work-mark-label {
-  transform: rotate(-45deg);
-  font-family: var(--font-en);
-  font-weight: 800;
-  font-size: clamp(22px, 2.6vw, 34px);
-  letter-spacing: 0.02em;
-  color: #fff;
-  direction: ltr;
-}
-
 /* Real client logo, upright inside the rotated diamond — each logo file's
    own background (see the --mark-accent overrides below) is picked to
    match so there's no visible seam between the image and the diamond. */
@@ -302,7 +291,11 @@
   flex: 1 1 560px;
   min-width: 0;
   max-width: 620px;
-  min-height: clamp(440px, 64vh, 640px);
+  /* Taller than before: all 3 beats render together now (see .work-beats
+     above) instead of one at a time, so .work-slide (position: absolute,
+     doesn't contribute to this height on its own) needs more room to
+     avoid clipping the longest variant. */
+  min-height: clamp(560px, 78vh, 780px);
 }
 
 .work-slide {
@@ -343,16 +336,62 @@
   color: var(--color-ink);
 }
 
+/* All 3 beats (challenge/action/result) render together now — one settled
+   read of the whole case study instead of a sequential scroll-triggered
+   reveal per beat (that was the actual complaint: 3 separate scroll beats
+   per company, times 3 companies, felt long). Only the SLIDE itself still
+   fades in/out (see updatePin() in work-stories.js) as the user scrolls
+   between companies — everything inside it now appears together, laid out
+   as a numbered timeline for a settled, professional case-study read. */
 .work-beats {
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2.4vh, 24px);
   margin-top: clamp(22px, 3.6vh, 36px);
-  min-height: clamp(200px, 26vh, 260px);
 }
 
 .work-beat {
+  position: relative;
+  display: flex;
+  gap: 14px;
+}
+
+.work-beat-index {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 12%, white);
+  color: var(--accent);
+  font-family: var(--font-en);
+  font-weight: 700;
+  font-size: 13px;
+  direction: ltr;
+}
+
+/* The connecting timeline line — one per beat, skipped on the last since
+   there's nothing below it to connect to. */
+.work-beat:not(:last-child)::after {
+  content: '';
   position: absolute;
-  inset: 0 0 auto 0;
-  will-change: opacity, transform, filter;
+  top: 28px;
+  inset-inline-start: 13px;
+  width: 1px;
+  height: calc(100% - 14px);
+  background: rgba(26, 26, 26, 0.12);
+}
+
+.work-beat-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  /* Nudges the label/text down to sit centered against the 28px index
+     circle beside it instead of flush with its top edge. */
+  padding-top: 3px;
 }
 
 .work-beat-label {
@@ -367,10 +406,10 @@
 }
 
 .work-beat-text {
-  margin-top: 14px;
+  margin-top: 10px;
   font-family: var(--font-ar);
-  font-size: clamp(15px, 1.4vw, 18px);
-  line-height: 1.8;
+  font-size: clamp(14px, 1.25vw, 17px);
+  line-height: 1.75;
   color: var(--color-ink);
   max-width: 560px;
 }
@@ -399,24 +438,6 @@
   font-size: clamp(12.5px, 1.05vw, 14px);
   color: var(--color-ink-muted);
   max-width: 160px;
-}
-
-.work-beat-dots {
-  display: flex;
-  gap: 8px;
-  margin-top: clamp(24px, 3.6vh, 40px);
-}
-
-.work-beat-dot {
-  width: 26px;
-  height: 3px;
-  border-radius: 2px;
-  background: rgba(26, 26, 26, 0.14);
-  transition: background-color 0.3s ease;
-}
-
-.work-beat-dot.is-active {
-  background: var(--accent);
 }
 
 .work-slide[data-slide="0"] { --accent: var(--color-logo-navy); }
@@ -448,14 +469,15 @@
     gap: 12px;
   }
 
+  /* All 3 beats now render together (see .work-beats) instead of one at a
+     time — text sizing/line-height/gaps below come down a notch from their
+     desktop values so the longest case study's action paragraph (5-6
+     lines) still fits .work-slides' own height. Sizes/dimensions here
+     (.work-marks, .work-slides) are deliberately left alone per the user —
+     only vertical POSITIONING (padding-top, top, margin-top) is tuned. */
   .work-marks {
     align-self: center;
-    /* .work-slides reserves a tall min-height for its tallest beat variant
-       (see above), so once the actual text content is shorter than that,
-       .work-pin-row's own justify-content: center centers a taller empty
-       box than what's visually there — pulling the mark cluster up closes
-       that gap instead of leaving it centered under empty space. */
-    margin-top: -80px;
+    margin-top: -120px;
     width: clamp(160px, 42vw, 220px);
     height: clamp(160px, 42vw, 220px);
     flex: 0 0 auto;
@@ -464,7 +486,18 @@
   .work-slides {
     width: 100%;
     max-width: 100%;
-    min-height: clamp(380px, 56vh, 520px);
+    min-height: clamp(500px, 82vh, 680px);
+  }
+
+  .work-slide {
+    /* Was clamp(56px, 8vh, 76px) — tight enough that the client name/title
+       actually rendered under the fixed .site-header instead of below it. */
+    padding-top: clamp(108px, 15vh, 134px);
+  }
+
+  .work-slide-client {
+    top: clamp(64px, 9vh, 80px);
+    font-size: clamp(15px, 4vw, 18px);
   }
 
   .work-slide-body {
@@ -472,14 +505,47 @@
   }
 
   .work-card-title {
-    font-size: clamp(20px, 5.6vw, 28px);
+    font-size: clamp(19px, 5.2vw, 25px);
   }
 
-  .work-slide-client {
-    font-size: clamp(16px, 4.4vw, 22px);
+  .work-beats {
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .work-beat-index {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+  }
+
+  .work-beat:not(:last-child)::after {
+    top: 22px;
+    inset-inline-start: 10px;
+  }
+
+  .work-beat-label {
+    padding: 3px 10px;
+    font-size: 11px;
+  }
+
+  .work-beat-text {
+    margin-top: 6px;
+    font-size: clamp(12.5px, 3.4vw, 14px);
+    line-height: 1.55;
   }
 
   .work-stats {
-    gap: 16px;
+    gap: 14px;
+    margin-top: 12px;
+  }
+
+  .work-stat-number {
+    font-size: clamp(22px, 6vw, 28px);
+  }
+
+  .work-stat-label {
+    margin-top: 4px;
+    font-size: 11.5px;
   }
 }

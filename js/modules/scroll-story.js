@@ -2,6 +2,7 @@ import { clamp01, easeInOut, easeOutBack, smoothstep } from '../utils/easing.js'
 import { createVideoScrubber } from '../utils/video-scrub.js';
 import { createStableViewport } from '../utils/stable-viewport.js';
 import { getScrollRoot } from '../utils/scroll-root.js';
+import { attemptAutoplay } from '../utils/autoplay.js';
 
 /**
  * Drives the single continuous pinned scroll sequence: hero intro -> TDX logo
@@ -122,12 +123,8 @@ export function initScrollStory() {
   // the bigger 325vh total.
   var TDX_FADE_START = 0.544;
   var TDX_FADE_END = 0.608;
-  // Starts partway through the video's own scrub window below (same 50%-
-  // through relative position it always was, just re-expressed against the
-  // window's own new, wider span), so it's "a few moments" before the
-  // pause, not the whole window — ends at COFFEE_TEXT_END, same scrolled
-  // value the video pauses at (see COFFEE_VIDEO_SCRUB_END), so the button
-  // finishes appearing in the exact instant the video stops.
+  // The coffee text/button reveal itself is still scroll-driven — only the
+  // video's own playback (see initCoffeeVideo() below) no longer is.
   var COFFEE_TEXT_START = 0.804;
   var COFFEE_TEXT_END = 1;
 
@@ -174,67 +171,61 @@ export function initScrollStory() {
     }
   }
 
-  // Hero video: scroll-scrubbed from frame 0 — no autoplay phase, the user
-  // controls it by scrolling from the very start.
+  // Hero video: plays on its own (autoplay + loop, see the `loop` attribute
+  // in the HTML), independent of scroll — no longer scrubbed frame-by-frame
+  // against scroll position the way the coffee-man/office videos still are.
   var reducedMotion =
     window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var videoHookDone = false;
-  var videoHookEndTime = 0;
-  // Scrubbing stops mapping further scroll to the video once the curtain has
-  // fully lifted it off screen (see SHRINK_END below) — scrubbing frames
-  // nobody can see would just be wasted seeks.
-  var VIDEO_SCRUB_END = 0.9;
-  // See js/utils/video-scrub.js for what this actually guards against
-  // (seek pileup on fast scroll, and a WebKit-observed freeze when
-  // 'seeked' silently doesn't fire).
-  var scrubHeroVideo = heroVideo ? createVideoScrubber(heroVideo) : null;
 
   function initHeroVideo() {
-    // Reduced motion: leave the video on its poster frame, untouched — no
-    // scroll-scrub, same "skip the motion" treatment the rest of the site
-    // already gives .intro-letter/.partners-track. videoHookDone stays
-    // false here on purpose, so updateHeroVideo()'s guard keeps it
-    // untouched too.
+    // Reduced motion: leave the video on its poster frame, untouched — same
+    // "skip the motion" treatment the rest of the site already gives
+    // .intro-letter/.partners-track.
     if (!heroVideo || reducedMotion) return;
-    // No autoplay hook — scroll controls every frame from 0.
-    videoHookDone = true;
-    videoHookEndTime = 0;
-  }
-
-  function updateHeroVideo(scrolled) {
-    if (!scrubHeroVideo || !videoHookDone || !heroVideo.duration) return;
-    var scrubT = clamp01(scrolled / VIDEO_SCRUB_END);
-    scrubHeroVideo(videoHookEndTime + scrubT * (heroVideo.duration - videoHookEndTime));
+    // See js/utils/autoplay.js — retries once on first touch/scroll/click if
+    // the initial autoplay attempt is blocked, instead of leaving it stuck
+    // on the poster frame.
+    attemptAutoplay(heroVideo);
   }
 
   // Coffee-man video: hidden behind .hero-coffee-overlay (mirrors the TDX
   // logo's own opacity every tick below, so they fade out in perfect
-  // lockstep) and completely inert until the logo/overlay are fully gone —
-  // scroll before TDX_FADE_END does nothing to it. From there, scroll alone
-  // drives it from frame 0 up to the "holding the dallah, looking at
-  // camera" frame (COFFEE_VIDEO_TARGET_TIME, picked by eye off the source
-  // clip), ending at COFFEE_TEXT_END — the same scrolled value the coffee
-  // text finishes revealing at, so the button and the paused frame land
-  // together. Clicking .coffee-btn then hands it off to native playback
-  // (see coffeeVideoReleased below) so it carries on to the actual pour.
-  var COFFEE_VIDEO_SCRUB_START = TDX_FADE_END;
-  var COFFEE_VIDEO_SCRUB_END = COFFEE_TEXT_END;
+  // lockstep) — starts playing on its own, independent of scroll, the
+  // instant the TDX logo has fully faded out (scrolled crosses
+  // TDX_FADE_END, see the one-shot trigger in update() below), then runs
+  // from frame 0 up to the "holding the dallah, looking at camera" frame
+  // (COFFEE_VIDEO_TARGET_TIME, picked by eye off the source clip), pausing
+  // itself there via the timeupdate listener below. Clicking .coffee-btn
+  // then hands it off to native playback (see coffeeVideoReleased below)
+  // so it carries on to the actual pour.
   var COFFEE_VIDEO_TARGET_TIME = 8.5;
   var coffeeVideoReleased = false;
-  var scrubCoffeeVideo = coffeeManVideo ? createVideoScrubber(coffeeManVideo) : null;
+  var coffeeVideoStarted = false;
 
-  function updateCoffeeVideo(scrolled) {
-    if (!scrubCoffeeVideo || reducedMotion || coffeeVideoReleased || !coffeeManVideo.duration) return;
-    var scrubT = clamp01((scrolled - COFFEE_VIDEO_SCRUB_START) / (COFFEE_VIDEO_SCRUB_END - COFFEE_VIDEO_SCRUB_START));
-    scrubCoffeeVideo(scrubT * COFFEE_VIDEO_TARGET_TIME);
+  function initCoffeeVideo() {
+    if (!coffeeManVideo || reducedMotion) return;
+    coffeeManVideo.addEventListener('timeupdate', function () {
+      if (coffeeVideoReleased) return;
+      if (coffeeManVideo.currentTime >= COFFEE_VIDEO_TARGET_TIME) {
+        coffeeManVideo.pause();
+        coffeeManVideo.currentTime = COFFEE_VIDEO_TARGET_TIME;
+      }
+    });
+  }
+
+  function startCoffeeVideo() {
+    if (!coffeeManVideo || reducedMotion || coffeeVideoStarted) return;
+    coffeeVideoStarted = true;
+    attemptAutoplay(coffeeManVideo);
   }
 
   if (coffeeBtn) {
     coffeeBtn.addEventListener('click', function (e) {
       e.preventDefault();
       if (!coffeeManVideo) return;
-      // From here scroll no longer touches this video (updateCoffeeVideo's
-      // guard above) — it plays itself out to the real pour. Every click —
+      // From here the timeupdate listener above stops re-pausing it at
+      // COFFEE_VIDEO_TARGET_TIME (its own guard checks coffeeVideoReleased)
+      // — it plays itself out to the real pour. Every click —
       // first or repeated, mid-pour or after it's finished — replays from
       // the same paused frame rather than resuming from wherever it
       // currently is, so the button always shows the same pour from the
@@ -308,36 +299,16 @@ export function initScrollStory() {
     );
   }
 
-  // Office video: scroll-scrubbed across the whole STORY phase (0 at the
-  // zoom frame's own start, 1 once the about text is fully revealed), but
-  // one-way — Math.max means officeVideoMaxP only ever grows, so scrolling
-  // back up WITHIN the section leaves the video exactly where it was
-  // instead of rewinding it. Fully exiting back above the section (scrolled
-  // up past its own start, into the hero) forgets that max, so scrolling
-  // back down into it again replays from the start instead of staying
-  // stuck at wherever it last reached — see the rawP check below, which
-  // needs the UNCLAMPED progress to tell "scrolled back above the section"
-  // apart from "somewhere inside it", something the already-clamped p
-  // passed in can't distinguish (both would just read 0).
-  // Uses the same shared scrubber (see js/utils/video-scrub.js) as the
-  // other three videos for the seek-collision/WebKit-freeze guards; the
-  // one-way ratchet above is specific to this video, handled here before
-  // ever calling the scrubber.
-  var officeVideoMaxP = 0;
-  var scrubOfficeVideo = officeVideo ? createVideoScrubber(officeVideo) : null;
-
-  function updateOfficeVideo(p) {
-    if (!scrubOfficeVideo || reducedMotion || !officeVideo.duration) return;
-    var rawP = (getSectionProgress(hero) - HERO_FRACTION) / STORY_FRACTION;
-    if (rawP <= 0) officeVideoMaxP = 0;
-    officeVideoMaxP = Math.max(officeVideoMaxP, p);
-    scrubOfficeVideo(clamp01(officeVideoMaxP) * officeVideo.duration);
+  // Office video: plays on its own (autoplay + loop), independent of
+  // scroll — same treatment as the hero video now.
+  function initOfficeVideo() {
+    if (!officeVideo || reducedMotion) return;
+    attemptAutoplay(officeVideo);
   }
 
   function updateStory() {
     if (!storySection) return;
     var p = getStoryProgress();
-    updateOfficeVideo(p);
 
     // Zoom frame: stays fully hidden through the coffee text and only fades
     // in as it grows to fullscreen — no separate "appear" beat beforehand.
@@ -402,8 +373,6 @@ export function initScrollStory() {
   function update() {
     var scrolled = getProgress();
 
-    updateHeroVideo(scrolled);
-
     if (siteHeader) {
       // Header is invisible on the hero itself, fading in (with the blurred
       // gray background) the instant the user starts scrolling at all —
@@ -440,8 +409,6 @@ export function initScrollStory() {
       heroMedia.style.transform = 'translateY(' + liftY + 'vh) scale(' + scale + ')';
     }
 
-    updateCoffeeVideo(scrolled);
-
     if (tdxWrap) {
       // Logo grows small -> large, faint -> full white, and glides from the old
       // headline spot to dead-center — all three happening together, driven by
@@ -459,6 +426,11 @@ export function initScrollStory() {
       // fade) so the overlay can never drift out of sync with it — see
       // .hero-coffee-overlay in hero.css.
       if (heroCoffeeOverlay) heroCoffeeOverlay.style.opacity = String(tdxOpacity);
+
+      // The logo has fully faded out once scrolled reaches TDX_FADE_END —
+      // startCoffeeVideo()'s own coffeeVideoStarted guard makes this a
+      // one-shot trigger, not a re-check every tick past that point.
+      if (scrolled >= TDX_FADE_END) startCoffeeVideo();
 
       // Image's own bottom edge in real viewport px. Read directly off
       // heroMedia's own live layout (set just above, same tick) instead of
@@ -781,6 +753,13 @@ export function initScrollStory() {
   scrollRoot.addEventListener('scroll', onScroll, { passive: true });
   scrollRoot.addEventListener('touchmove', onScroll, { passive: true });
   window.addEventListener('load', init);
+  // Starts once the whole page (not just this script) has finished loading,
+  // same as the user asked for — unlike initHeroVideo() above, which starts
+  // immediately since that video is the very first visible thing.
+  // Only wires up the pause-at-target-time listener — actually starting
+  // playback is scroll-triggered, see startCoffeeVideo() in update().
+  window.addEventListener('load', initCoffeeVideo);
+  window.addEventListener('load', initOfficeVideo);
 
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(init);
