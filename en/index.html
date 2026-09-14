@@ -88,6 +88,11 @@
         </a>
       </div>
       <div class="header-controls">
+        <button type="button" class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+        </button>
         <nav class="main-nav" id="mainNav" aria-label="Main navigation">
           <a href="#about">About Us</a>
           <a href="#wipePanel">How We Work</a>
@@ -98,6 +103,7 @@
       </div>
     </div>
   </header>
+  <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
 
   <div id="scrollRoot">
   <section class="hero" id="hero" aria-labelledby="hero-heading" data-bar="dark">
@@ -274,7 +280,10 @@
           <div class="values-strip" id="valuesStrip">
             <article class="value-card">
               <div class="value-card-media">
-                <img src="../assets/images/about/value-commitment.webp" alt="Commitment" loading="lazy">
+                <picture>
+                  <source srcset="../assets/images/about/value-commitment-phone.webp" media="(max-width: 768px)">
+                  <img src="../assets/images/about/value-commitment.webp" alt="Commitment" loading="lazy">
+                </picture>
               </div>
               <div class="value-card-label">
                 <span class="value-card-number">01</span>
@@ -285,7 +294,10 @@
 
             <article class="value-card">
               <div class="value-card-media">
-                <img src="../assets/images/about/value-innovation.webp" alt="Innovation" loading="lazy">
+                <picture>
+                  <source srcset="../assets/images/about/value-innovation-phone.webp" media="(max-width: 768px)">
+                  <img src="../assets/images/about/value-innovation.webp" alt="Innovation" loading="lazy">
+                </picture>
               </div>
               <div class="value-card-label">
                 <span class="value-card-number">02</span>
@@ -296,7 +308,10 @@
 
             <article class="value-card">
               <div class="value-card-media">
-                <img src="../assets/images/about/value-results.webp" alt="Results" loading="lazy">
+                <picture>
+                  <source srcset="../assets/images/about/value-results-phone.webp" media="(max-width: 768px)">
+                  <img src="../assets/images/about/value-results.webp" alt="Results" loading="lazy">
+                </picture>
               </div>
               <div class="value-card-label">
                 <span class="value-card-number">03</span>

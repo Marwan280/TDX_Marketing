@@ -24,14 +24,26 @@
 }
 
 .header-brand,
-.main-nav {
+.main-nav,
+.nav-toggle {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
 
 .site-header.is-scrolled .header-brand,
-.site-header.is-scrolled .main-nav {
+.site-header.is-scrolled .main-nav,
+.site-header.is-scrolled .nav-toggle {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Mobile's sidebar (see the max-width: 768px block further down) has to be
+   reachable the instant the page opens, not just once .is-scrolled kicks
+   in — a visitor scrolling the hero shouldn't have the menu unreachable
+   the whole time. .main-nav.is-open is two classes (0,2,0) vs. the plain
+   .main-nav above (0,1,0), so this naturally wins without !important. */
+.main-nav.is-open {
   opacity: 1;
   pointer-events: auto;
 }
@@ -70,13 +82,43 @@
   background-color: var(--color-text);
 }
 
-/* Always laid out (no hamburger to unfurl from) — .header-brand/.main-nav
-   above handle its fade-in on scroll, this just handles the link row itself. */
+/* Desktop: always laid out as a plain inline row, no hamburger involved —
+   .header-brand/.main-nav above handle its fade-in on scroll, this just
+   handles the link row itself. Below 768px (see that media query further
+   down) this same element instead becomes a slide-in sidebar, toggled by
+   .nav-toggle, which is display: none up here on desktop. */
 .main-nav {
   display: flex;
   align-items: center;
   gap: 22px;
   white-space: nowrap;
+}
+
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 5px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(245, 241, 234, 0.3);
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.nav-toggle:hover {
+  border-color: var(--color-teal);
+}
+
+.nav-toggle-bar {
+  width: 15px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: var(--color-text);
 }
 
 .main-nav a {
@@ -130,14 +172,57 @@
 }
 
 @media (max-width: 768px) {
-  /* No hamburger to hide the links behind anymore, so on a phone the row
-     just has to fit next to the logo and EN switch on its own — smaller
-     type and a tighter gap instead of the desktop spacing. */
+  /* The plain inline row (fine on desktop) read as too cramped right next
+     to the logo on a phone — back to a hamburger that opens a slide-in
+     sidebar instead. inset-inline-end (not right/left, and not a
+     transform) so the slide direction is automatically correct for both
+     the Arabic (RTL) and English (LTR) pages with no [dir] override
+     needed: animating a logical inset property already respects direction
+     on its own. */
+  .nav-toggle {
+    display: flex;
+  }
+
   .main-nav {
-    gap: 12px;
+    position: fixed;
+    top: 0;
+    inset-inline-end: -85vw;
+    z-index: 200;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 28px;
+    width: min(300px, 85vw);
+    height: 100vh;
+    height: 100dvh;
+    padding: 32px;
+    background: rgba(20, 18, 16, 0.97);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    white-space: normal;
+    transition: inset-inline-end 0.35s ease;
+  }
+
+  .main-nav.is-open {
+    inset-inline-end: 0;
   }
 
   .main-nav a {
-    font-size: 12px;
+    font-size: 18px;
+  }
+
+  .nav-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+
+  .nav-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
   }
 }

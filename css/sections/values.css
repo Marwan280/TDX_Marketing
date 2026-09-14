@@ -96,6 +96,7 @@
   inset: 0;
 }
 
+.value-card-media picture,
 .value-card-media img {
   width: 100%;
   height: 100%;
@@ -188,7 +189,11 @@
      (values.css default, further up) was cropping straight through empty
      background and clipping the actual subject (the handshake / the lead
      paper plane pulling away from the pack / the arrow reaching its peak)
-     out of the narrow mobile card entirely. */
+     out of the narrow mobile card entirely. Only still relevant between
+     769-900px now — a real device width this query's own max-width covers,
+     but narrower than the <picture><source media="(max-width: 768px)">
+     breakpoint below that swaps in a dedicated portrait photo, so that
+     band still gets the same wide desktop photo these were tuned for. */
   .value-card:nth-child(1) .value-card-media img {
     object-position: 62% 45%;
   }
@@ -199,5 +204,20 @@
 
   .value-card:nth-child(3) .value-card-media img {
     object-position: 70% 25%;
+  }
+}
+
+/* True phones — matches the <picture> breakpoint in index.html/en/index.html
+   that swaps each value card's photo for a dedicated portrait version,
+   already composed to fit a tall narrow card on its own. The three
+   nth-child crop-position overrides above were only ever compensating for
+   forcing a WIDE desktop photo into that same narrow shape — reset back to
+   plain center here so they don't mis-frame the portrait photos, which
+   need no compensating at all. */
+@media (max-width: 768px) {
+  .value-card:nth-child(1) .value-card-media img,
+  .value-card:nth-child(2) .value-card-media img,
+  .value-card:nth-child(3) .value-card-media img {
+    object-position: center;
   }
 }

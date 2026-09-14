@@ -425,7 +425,11 @@
      studio composition (man, table, chair together) instead, letterboxed
      top/bottom against a background colour sampled straight off the
      video's own backdrop so the letterbox reads as more of the same set
-     rather than a visible seam. */
+     rather than a visible seam. Only still relevant between 769-900px,
+     where this query's own max-width covers a real device but the
+     <source media="(max-width: 768px)"> phone clip below doesn't — that
+     narrow band still gets the landscape desktop video, so it still needs
+     this fallback treatment. */
   .hero-coffee-media {
     background-color: #e8e6e7;
   }
@@ -448,6 +452,71 @@
     padding: 22px 20px;
     border-radius: 22px;
     box-shadow: 0 16px 40px -12px rgba(20, 16, 14, 0.3);
+  }
+}
+
+/* True phones — matches the <source media="(max-width: 768px)"> breakpoint
+   that swaps in the dedicated portrait coffee-man clip (see index.html/
+   en/index.html). That clip already frames the man low and to the right,
+   leaving the whole top ~40% of frame as plain, near-white studio
+   backdrop — cover fills the screen with it edge to edge (no more grey
+   letterbox bars) and the text sits directly on that empty area, same
+   treatment as desktop: no card, dark ink (the backdrop there is light,
+   not dark — white text would vanish), everything left-aligned as ONE
+   block (title, subtitle, button all starting from the same edge).
+   Centering the title/subtitle while breaking the button out to the left
+   on its own (an earlier version of this) read as disjointed — text
+   centered but its own call-to-action off in a corner is two different
+   alignments fighting each other, not one composition. Left-aligning the
+   whole block is also what desktop already does for this exact content,
+   so the two stay visually consistent with each other, not just internally
+   consistent on their own. */
+@media (max-width: 768px) {
+  .hero-coffee-video {
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .hero-coffee-text {
+    left: 6%;
+    /* clamp, not a plain %, so this clears the fixed .site-header reliably
+       across phone sizes instead of drifting too close on a shorter screen. */
+    top: clamp(72px, 11%, 104px);
+    bottom: auto;
+    transform: none;
+    /* The BLOCK sits over on the screen's left (left: 6% above) — that's
+       what keeps it clear of the man in the clip. Centering the text
+       WITHIN that narrow block (not left- or right-aligning the lines
+       inside it) is the separate, distinct choice the user actually asked
+       for: short stacked lines centered on themselves, block position and
+       line alignment are two different axes. */
+    text-align: center;
+    width: 58%;
+    max-width: 260px;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .coffee-title {
+    color: var(--color-ink);
+    font-size: clamp(22px, 6vw, 28px);
+    line-height: 1.4;
+  }
+
+  .coffee-subtitle {
+    color: var(--color-ink-muted);
+    font-size: 15px;
+    margin-top: 12px;
+  }
+
+  .coffee-btn {
+    margin-top: 20px;
+    padding: 12px 26px;
+    font-size: 14px;
   }
 }
 

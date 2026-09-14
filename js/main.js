@@ -4,6 +4,7 @@ import { initWorkStories } from './modules/work-stories.js';
 import { initHeroIntroReveal } from './modules/hero-intro-reveal.js';
 import { initPartnersReveal } from './modules/partners-reveal.js';
 import { initClosingReveal } from './modules/closing-reveal.js';
+import { initNavToggle } from './modules/nav-toggle.js';
 import { getScrollRoot } from './utils/scroll-root.js';
 import { initThemeColorSync } from './utils/theme-color.js';
 
@@ -62,6 +63,7 @@ if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
 
 initHeroIntroReveal();
 initThemeColorSync();
+initNavToggle();
 initScrollStory();
 initServicesStack();
 initWorkStories();
