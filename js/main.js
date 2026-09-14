@@ -49,6 +49,17 @@ Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'), function
   });
 });
 
+// Matches the (max-width: 768px) the <source media> phone variants use for
+// these same videos (see index.html/en/index.html) — the poster attribute
+// has no media-query equivalent of its own, so this is the one-time JS
+// swap that keeps the two consistent (a portrait poster for the portrait
+// phone clip, instead of the desktop poster showing briefly before it).
+if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
+  Array.prototype.forEach.call(document.querySelectorAll('video[data-poster-mobile]'), function (video) {
+    video.setAttribute('poster', video.getAttribute('data-poster-mobile'));
+  });
+}
+
 initHeroIntroReveal();
 initThemeColorSync();
 initScrollStory();
