@@ -135,7 +135,17 @@ export function initScrollStory() {
   // +65 more for the coffee-man video's own scrub window — see the fraction
   // rescale comment above).
   var HERO_SCROLL_VH = 325;
-  var STORY_SCROLL_VH = 320;
+  // Was 320 — nearly as long as the whole multi-beat HERO phase above (intro
+  // fade + logo grow + welcome text + curtain lift + coffee video + text
+  // reveal, 7+ beats) despite covering far less: one photo zoom-in, one
+  // overlay fade, then the about text. That mismatch is what made this
+  // specific phase feel like it dragged on forever relative to everything
+  // around it — cut down to sit close to WIPE/VALUES/TRUST below so the
+  // whole pinned sequence advances at a consistent rate. All of this
+  // phase's internal beats (ZOOM_GROW_END, OVERLAY_END, the text-line
+  // stagger) are fractions of this number, so they all speed up together,
+  // proportionally — nothing about their relative timing changed.
+  var STORY_SCROLL_VH = 230;
   var WIPE_SCROLL_VH = 200;
   var VALUES_SCROLL_VH = 200;
   var TRUST_SCROLL_VH = 220;

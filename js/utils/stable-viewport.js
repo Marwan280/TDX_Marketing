@@ -12,8 +12,9 @@
 // a real resize (orientation change, actual window resize, devtools) filters
 // that out, since a toolbar hide/show never changes the width.
 // Also published as --vh100 (1% of this same frozen height, in px) so CSS
-// that drives actual scroll DISTANCE — .hero's 1265vh total — can be
-// expressed as calc(var(--vh100) * 1265) instead of plain vh. Plain vh on
+// that drives actual scroll DISTANCE — .hero's total (see hero.css, must
+// match scroll-story.js's TOTAL_SCROLL_VH) — can be expressed as
+// calc(var(--vh100) * N) instead of plain vh. Plain vh on
 // iOS Safari doesn't stay put the way this module's own `height` doesn't:
 // the very same address-bar hide/show that .hero-pin's 100svh already
 // works around also nudges .hero's OWN total scrollable height as the
