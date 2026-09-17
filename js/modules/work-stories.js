@@ -90,7 +90,13 @@ export function initWorkStories() {
     var activeIndex = Math.min(slideCount - 1, Math.floor(p * slideCount));
 
     slides.forEach(function (slide, si) {
-      var slideO = bandOpacity(p, si, slideCount, 0.025);
+      // 0.06 (was 0.025): each crossfade used to complete in ~2.5% of the
+      // whole 300vh pin (~7.5vh) — an almost instant snap sandwiched between
+      // a ~92.5vh hold where nothing moved, which read as "stuck, then
+      // sudden" next to the hero pin's continuously eased reveals. Widened
+      // so the crossfade itself takes a visible, proportionate share of the
+      // scroll instead of feeling like a jump-cut.
+      var slideO = bandOpacity(p, si, slideCount, 0.06);
       slide.el.style.opacity = String(slideO);
       slide.el.style.filter = 'blur(' + (1 - slideO) * 5 + 'px)';
       slide.el.style.pointerEvents = si === activeIndex ? 'auto' : 'none';

@@ -92,40 +92,47 @@ export function initScrollStory() {
 
   // Hero phases (as fractions of the whole pinned scroll range). Every
   // fraction from HEADER_SHOW_THRESHOLD through TDX_FADE_END is pinned to
-  // the EXACT same real scroll distance (vh) it always was — HERO_SCROLL_VH
-  // grew from 260 to 325 below specifically to give the coffee-man video's
-  // own scrub window (TDX_FADE_END -> COFFEE_TEXT_END) more room to be
-  // scrubbed through more slowly, not to change when anything up through
-  // the logo fade happens. Every constant through TDX_FADE_END here is the
-  // old fraction re-expressed against the new, bigger total (old*260/325),
-  // so scrolling through the intro/logo/welcome feels byte-for-byte
-  // identical to before — only the coffee video's own scrub speed changed.
+  // the EXACT same real scroll distance (vh) it always was, now re-expressed
+  // against HERO_SCROLL_VH=280 instead of the old 325 (old*325/280) — see
+  // the note below TDX_FADE_END for why that total shrank.
   // Header appears as the curtain starts lifting away from the opening photo
   // (matches SHRINK_START below) — that's the first visual cue of leaving the
   // opening shot, rather than waiting for the whole intro cinematic to finish.
-  var HEADER_SHOW_THRESHOLD = 0.3584;
-  var INTRO_END = 0.1152;
+  var HEADER_SHOW_THRESHOLD = 0.416;
+  var INTRO_END = 0.1337;
   // The instant "The Destinations Experts" is gone, the real logo takes its
   // place — small, faint and roughly where the headline sat — then grows,
   // strengthens to full white and glides to dead-center all together, ending
   // at rest exactly where it stays for the remainder of the hero.
   var LOGO_START = INTRO_END;
-  var LOGO_END = 0.2688;
+  var LOGO_END = 0.312;
   var LOGO_SCALE_START = 0.32;
-  var FINAL_START = 0.224;
-  var FINAL_END = 0.3328;
-  var TEXT_OUT_START = 0.3456;
-  var TEXT_OUT_END = 0.3648;
-  var SHRINK_START = 0.3584;
-  var SHRINK_END = 0.576;
+  var FINAL_START = 0.26;
+  var FINAL_END = 0.3863;
+  var TEXT_OUT_START = 0.4011;
+  var TEXT_OUT_END = 0.4234;
+  var SHRINK_START = 0.416;
+  var SHRINK_END = 0.6686;
   // Fade starts late and finishes just before the coffee video/text take
   // over — same real scroll distance as always, just re-expressed against
-  // the bigger 325vh total.
-  var TDX_FADE_START = 0.544;
-  var TDX_FADE_END = 0.608;
+  // the smaller 280vh total (see below).
+  var TDX_FADE_START = 0.6314;
+  var TDX_FADE_END = 0.7057;
+  // Between TDX_FADE_END and COFFEE_TEXT_START nothing scroll-linked
+  // actually changes — the coffee-man video plays on its own timeline
+  // (startCoffeeVideo(), triggered once, not scrubbed), not tied to scroll
+  // position at all. That gap used to be 0.196 of HERO_SCROLL_VH (~64vh):
+  // real scroll input the user had to provide with zero visible feedback in
+  // return, which is exactly what read as "stuck/heavy" here. Narrowed to a
+  // ~20vh beat (just enough for the coffee-man to visibly settle before his
+  // text pops up) and HERO_SCROLL_VH cut from 325 to 280 to actually remove
+  // that scroll distance rather than just handing it to the next phase —
+  // every fraction above was rescaled to keep its own real vh exactly what
+  // it was before, and COFFEE_TEXT's own span below is preserved too
+  // (~62vh, was ~64vh) — only the dead gap between them got smaller.
+  var COFFEE_TEXT_START = 0.7771;
   // The coffee text/button reveal itself is still scroll-driven — only the
   // video's own playback (see initCoffeeVideo() below) no longer is.
-  var COFFEE_TEXT_START = 0.804;
   var COFFEE_TEXT_END = 1;
 
   // Hero, story and the wipe-to-process handoff all share ONE continuous pin.
@@ -134,7 +141,7 @@ export function initScrollStory() {
   // HERO_SCROLL_VH is 325 (was 175, then 260 for a slower letter reveal, now
   // +65 more for the coffee-man video's own scrub window — see the fraction
   // rescale comment above).
-  var HERO_SCROLL_VH = 325;
+  var HERO_SCROLL_VH = 280;
   // Was 320 — nearly as long as the whole multi-beat HERO phase above (intro
   // fade + logo grow + welcome text + curtain lift + coffee video + text
   // reveal, 7+ beats) despite covering far less: one photo zoom-in, one
