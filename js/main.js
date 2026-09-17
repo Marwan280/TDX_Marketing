@@ -50,12 +50,32 @@ Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'), function
   });
 });
 
-// Matches the (max-width: 768px) the <source media> phone variants use for
-// these same videos (see index.html/en/index.html) — the poster attribute
-// has no media-query equivalent of its own, so this is the one-time JS
-// swap that keeps the two consistent (a portrait poster for the portrait
-// phone clip, instead of the desktop poster showing briefly before it).
-if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
+// Hero/coffee-man/office videos each have a desktop and a phone version
+// (data-src-desktop/data-src-mobile — see index.html/en/index.html), with
+// NO <source> written in the HTML at all. That's deliberate: a <video>'s
+// own <source media="..."> is what every earlier version of this used, but
+// it's genuinely unreliable across mobile browsers in a way <picture>'s
+// identical-looking media attribute isn't — some phones were fetching (and
+// sometimes playing) the desktop clip instead of, or as well as, the phone
+// one, inconsistently between reloads on the same device. The only way to
+// guarantee a device never even requests the other one's video is to never
+// put its URL in the DOM in the first place: this one-time check decides
+// the device, then injects exactly one <source> — so the wrong file is
+// never even a possibility, not just "unlikely". The poster swap is the
+// exact same decision, reused, so the still frame shown before playback
+// starts also always matches whichever clip actually got picked.
+var isMobileDevice = !!(window.matchMedia && window.matchMedia('(max-width: 768px)').matches);
+
+Array.prototype.forEach.call(document.querySelectorAll('video[data-src-desktop]'), function (video) {
+  var src = isMobileDevice ? video.getAttribute('data-src-mobile') : video.getAttribute('data-src-desktop');
+  var source = document.createElement('source');
+  source.src = src;
+  source.type = 'video/mp4';
+  video.appendChild(source);
+  video.load();
+});
+
+if (isMobileDevice) {
   Array.prototype.forEach.call(document.querySelectorAll('video[data-poster-mobile]'), function (video) {
     video.setAttribute('poster', video.getAttribute('data-poster-mobile'));
   });
