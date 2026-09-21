@@ -10,7 +10,9 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  /* Above .nav-backdrop (150) so the open menu's own close button stays
+     bright and clickable instead of sitting dimmed under the backdrop. */
+  z-index: 160;
   padding: 12px 0;
   background-color: transparent;
   pointer-events: none;
@@ -181,6 +183,27 @@
      on its own. */
   .nav-toggle {
     display: flex;
+    /* Above the slide-in panel (.main-nav, 200, same stacking context) — the
+       panel is full height and used to cover this button, leaving no visible
+       way to close the menu. */
+    position: relative;
+    z-index: 210;
+  }
+
+  .nav-toggle-bar {
+    transition: transform 0.28s ease, opacity 0.2s ease;
+  }
+
+  .nav-toggle.is-open .nav-toggle-bar:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+
+  .nav-toggle.is-open .nav-toggle-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-toggle.is-open .nav-toggle-bar:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
   }
 
   .main-nav {

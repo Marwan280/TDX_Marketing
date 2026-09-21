@@ -201,3 +201,34 @@
     aspect-ratio: 1 / 1.1;
   }
 }
+
+/* Landscape phones / very short windows: the 2x2 stack above is far taller
+   than the screen (heading pushed off the top, bottom row cut off). One row
+   of four compact cards fits the pinned viewport instead. */
+@media (max-height: 560px) and (min-width: 561px) {
+  .process-cards {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .process-card {
+    aspect-ratio: auto;
+    padding: 14px 10px 12px;
+    border-radius: 18px;
+    gap: 4px;
+  }
+
+  .process-card-desc {
+    font-size: 11.5px;
+    line-height: 1.5;
+  }
+
+  .process-heading {
+    font-size: clamp(20px, 3vw, 28px);
+  }
+
+  .process-subtitle {
+    margin-top: 4px;
+    font-size: 13px;
+  }
+}

@@ -79,6 +79,22 @@ export function initClosingReveal() {
   window.addEventListener('load', updateHeading);
   updateHeading();
 
+  // The clip is preload="none" (it's the very last thing on the page, so it
+  // shouldn't compete with anything at load) — fetched once the closing
+  // section is within a couple of screens.
+  if (closingVideo && content && 'IntersectionObserver' in window) {
+    var warmObserver = new IntersectionObserver(
+      function (entries) {
+        if (!entries[0].isIntersecting) return;
+        warmObserver.disconnect();
+        closingVideo.preload = 'auto';
+        closingVideo.load();
+      },
+      { rootMargin: '200% 0px 200% 0px' }
+    );
+    warmObserver.observe(content);
+  }
+
   var revealTargets = [
     document.getElementById('closingMedia'),
     document.getElementById('closingDivider'),

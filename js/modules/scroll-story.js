@@ -1,5 +1,4 @@
 import { clamp01, easeInOut, easeOutBack, smoothstep } from '../utils/easing.js';
-import { createVideoScrubber } from '../utils/video-scrub.js';
 import { createStableViewport } from '../utils/stable-viewport.js';
 import { getScrollRoot } from '../utils/scroll-root.js';
 import { attemptAutoplay } from '../utils/autoplay.js';
@@ -244,25 +243,25 @@ export function initScrollStory() {
     attemptAutoplay(coffeeManVideo);
   }
 
-  // Buffers the clip well before it's needed (from the moment the logo has
-  // grown in, ~35vh before the fade even starts) instead of only when play()
-  // is first called — that cold start was the "have to wait for the man to
-  // appear" delay. The brief muted play()/pause() primes decoding too, since
-  // iOS Safari won't buffer a video that has never played, whatever its
-  // preload attribute says. Guarded so it can never pause the real playback.
-  var coffeeVideoWarmed = false;
-  function warmCoffeeVideo() {
-    if (!coffeeManVideo || reducedMotion || coffeeVideoWarmed) return;
-    coffeeVideoWarmed = true;
-    coffeeManVideo.preload = 'auto';
-    coffeeManVideo.load();
-    var primed = coffeeManVideo.play();
+  // Videos far below the fold start with preload="none" (so they don't fight
+  // the hero video for bandwidth at page load) and are fetched shortly before
+  // they're needed instead of only when play() is first called — that cold
+  // start was the "have to wait for the man to appear" delay. The brief muted
+  // play()/pause() also primes decoding, since iOS Safari won't buffer a video
+  // that has never played whatever its preload attribute says. keepPlaying()
+  // guards it so it can never pause real playback that has started meanwhile.
+  var warmedVideos = {};
+  function warmVideo(video, key, keepPlaying) {
+    if (!video || reducedMotion || warmedVideos[key]) return;
+    warmedVideos[key] = true;
+    video.preload = 'auto';
+    var primed = video.play();
     if (primed && typeof primed.then === 'function') {
       primed
         .then(function () {
-          if (!coffeeVideoStarted) {
-            coffeeManVideo.pause();
-            coffeeManVideo.currentTime = 0;
+          if (!keepPlaying()) {
+            video.pause();
+            video.currentTime = 0;
           }
         })
         .catch(function () {});
@@ -367,6 +366,7 @@ export function initScrollStory() {
       if (heroWanted) attemptAutoplay(heroVideo);
       else heroVideo.pause();
     }
+    if (scrolled >= 0.6) warmVideo(officeVideo, 'office', function () { return officeVideoOn; });
     var officeWanted = scrolled >= 0.85 && getWipeProgress() < WIPE_CURTAIN_END;
     if (officeVideo && officeWanted !== officeVideoOn) {
       officeVideoOn = officeWanted;
@@ -502,7 +502,7 @@ export function initScrollStory() {
       // scene is revealed, not starting from scratch after it) —
       // startCoffeeVideo()'s own coffeeVideoStarted guard makes this a
       // one-shot trigger, not a re-check every tick past that point.
-      if (scrolled >= LOGO_END) warmCoffeeVideo();
+      if (scrolled >= LOGO_END) warmVideo(coffeeManVideo, 'coffee', function () { return coffeeVideoStarted; });
       if (scrolled >= TDX_FADE_START) startCoffeeVideo();
 
       // Image's own bottom edge in real viewport px. Read directly off

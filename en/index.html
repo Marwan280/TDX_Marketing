@@ -66,6 +66,23 @@
   <link rel="stylesheet" href="../css/sections/work.css">
   <link rel="stylesheet" href="../css/sections/partners.css">
   <link rel="stylesheet" href="../css/sections/contact.css">
+  <link rel="preload" as="image" href="../assets/images/hero/hero-poster-phone.webp" media="(max-width: 768px) and (orientation: portrait)">
+  <link rel="preload" as="image" href="../assets/images/hero/hero-poster.webp" media="(min-width: 769px), (orientation: landscape)">
+  <link rel="modulepreload" href="../js/main.js">
+  <link rel="modulepreload" href="../js/modules/scroll-story.js">
+  <link rel="modulepreload" href="../js/utils/easing.js">
+  <link rel="modulepreload" href="../js/utils/video-scrub.js">
+  <link rel="modulepreload" href="../js/utils/stable-viewport.js">
+  <link rel="modulepreload" href="../js/utils/scroll-root.js">
+  <link rel="modulepreload" href="../js/utils/autoplay.js">
+  <link rel="modulepreload" href="../js/modules/services-stack.js">
+  <link rel="modulepreload" href="../js/modules/work-stories.js">
+  <link rel="modulepreload" href="../js/modules/hero-intro-reveal.js">
+  <link rel="modulepreload" href="../js/modules/partners-reveal.js">
+  <link rel="modulepreload" href="../js/modules/closing-reveal.js">
+  <link rel="modulepreload" href="../js/modules/contact-form.js">
+  <link rel="modulepreload" href="../js/modules/nav-toggle.js">
+  <link rel="modulepreload" href="../js/utils/theme-color.js">
   <link rel="stylesheet" href="../css/sections/closing.css">
 
   <script type="application/ld+json">
@@ -115,7 +132,7 @@
           class="hero-coffee-video"
           muted
           playsinline
-          preload="metadata"
+          preload="none"
           data-poster-desktop="../assets/images/hero/coffee-man-poster.webp" data-poster-mobile="../assets/images/hero/coffee-man-poster-phone.webp"
           data-src-desktop="../assets/video/coffee-man.mp4" data-src-mobile="../assets/video/coffee-man-phone.mp4"
           aria-label="Saudi coffee host holding a dallah, pouring coffee"
@@ -182,7 +199,7 @@
           muted
           loop
           playsinline
-          preload="metadata"
+          preload="none"
           data-poster-desktop="../assets/images/about/about-office-poster.webp" data-poster-mobile="../assets/images/about/about-office-poster-phone.webp"
           data-src-desktop="../assets/video/office.mp4" data-src-mobile="../assets/video/office-phone.mp4"
           aria-label="TDX team in a work meeting"
@@ -220,7 +237,7 @@
         <div class="process-cards">
           <article class="process-card">
             <div class="process-card-bg has-photo" aria-hidden="true">
-              <img src="../assets/images/about/process-listen.webp" alt="" loading="lazy">
+              <img src="../assets/images/about/process-listen.webp" alt="" loading="lazy" decoding="async">
             </div>
             <div class="process-card-content">
               <span class="process-card-number">01</span>
@@ -231,7 +248,7 @@
 
           <article class="process-card">
             <div class="process-card-bg has-photo" aria-hidden="true">
-              <img src="../assets/images/about/process-think.webp" alt="" loading="lazy">
+              <img src="../assets/images/about/process-think.webp" alt="" loading="lazy" decoding="async">
             </div>
             <div class="process-card-content">
               <span class="process-card-number">02</span>
@@ -242,7 +259,7 @@
 
           <article class="process-card">
             <div class="process-card-bg has-photo" aria-hidden="true">
-              <img src="../assets/images/about/process-execute.webp" alt="" loading="lazy">
+              <img src="../assets/images/about/process-execute.webp" alt="" loading="lazy" decoding="async">
             </div>
             <div class="process-card-content">
               <span class="process-card-number">03</span>
@@ -253,7 +270,7 @@
 
           <article class="process-card">
             <div class="process-card-bg has-photo" aria-hidden="true">
-              <img src="../assets/images/about/process-measure.webp" alt="" loading="lazy">
+              <img src="../assets/images/about/process-measure.webp" alt="" loading="lazy" decoding="async">
             </div>
             <div class="process-card-content">
               <span class="process-card-number">04</span>
@@ -276,7 +293,7 @@
               <div class="value-card-media">
                 <picture>
                   <source srcset="../assets/images/about/value-commitment-phone.webp" media="(max-width: 768px)">
-                  <img src="../assets/images/about/value-commitment.webp" alt="Commitment" loading="lazy">
+                  <img src="../assets/images/about/value-commitment.webp" alt="Commitment" loading="lazy" decoding="async">
                 </picture>
               </div>
               <div class="value-card-label">
@@ -290,7 +307,7 @@
               <div class="value-card-media">
                 <picture>
                   <source srcset="../assets/images/about/value-innovation-phone.webp" media="(max-width: 768px)">
-                  <img src="../assets/images/about/value-innovation.webp" alt="Innovation" loading="lazy">
+                  <img src="../assets/images/about/value-innovation.webp" alt="Innovation" loading="lazy" decoding="async">
                 </picture>
               </div>
               <div class="value-card-label">
@@ -304,7 +321,7 @@
               <div class="value-card-media">
                 <picture>
                   <source srcset="../assets/images/about/value-results-phone.webp" media="(max-width: 768px)">
-                  <img src="../assets/images/about/value-results.webp" alt="Results" loading="lazy">
+                  <img src="../assets/images/about/value-results.webp" alt="Results" loading="lazy" decoding="async">
                 </picture>
               </div>
               <div class="value-card-label">
@@ -382,7 +399,7 @@
       <article class="service-card" data-bar="light">
         <div class="service-card-pin">
           <div class="service-card-bg has-photo" aria-hidden="true">
-            <img src="../assets/images/about/service-identity.webp" alt="" loading="lazy">
+            <img src="../assets/images/about/service-identity.webp" alt="" loading="lazy" decoding="async">
           </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">01</span>
@@ -401,7 +418,7 @@
       <article class="service-card" data-bar="light">
         <div class="service-card-pin">
           <div class="service-card-bg has-photo" aria-hidden="true">
-            <img src="../assets/images/about/service-content.webp" alt="" loading="lazy">
+            <img src="../assets/images/about/service-content.webp" alt="" loading="lazy" decoding="async">
           </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">02</span>
@@ -420,7 +437,7 @@
       <article class="service-card" data-bar="light">
         <div class="service-card-pin">
           <div class="service-card-bg has-photo" aria-hidden="true">
-            <img src="../assets/images/about/service-social.webp" alt="" loading="lazy">
+            <img src="../assets/images/about/service-social.webp" alt="" loading="lazy" decoding="async">
           </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">03</span>
@@ -439,7 +456,7 @@
       <article class="service-card" data-bar="light">
         <div class="service-card-pin">
           <div class="service-card-bg has-photo" aria-hidden="true">
-            <img src="../assets/images/about/service-campaigns.webp" alt="" loading="lazy">
+            <img src="../assets/images/about/service-campaigns.webp" alt="" loading="lazy" decoding="async">
           </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">04</span>
@@ -458,7 +475,7 @@
       <article class="service-card" data-bar="dark">
         <div class="service-card-pin">
           <div class="service-card-bg has-photo" aria-hidden="true">
-            <img src="../assets/images/about/service-web.webp" alt="" loading="lazy">
+            <img src="../assets/images/about/service-web.webp" alt="" loading="lazy" decoding="async">
           </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">05</span>
@@ -477,7 +494,7 @@
       <article class="service-card" data-bar="dark">
         <div class="service-card-pin">
           <div class="service-card-bg has-photo" aria-hidden="true">
-            <img src="../assets/images/about/service-seo.webp" alt="" loading="lazy">
+            <img src="../assets/images/about/service-seo.webp" alt="" loading="lazy" decoding="async">
           </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">06</span>
@@ -496,7 +513,7 @@
       <article class="service-card" data-bar="dark">
         <div class="service-card-pin">
           <div class="service-card-bg has-photo" aria-hidden="true">
-            <img src="../assets/images/about/service-ai-search.webp" alt="" loading="lazy">
+            <img src="../assets/images/about/service-ai-search.webp" alt="" loading="lazy" decoding="async">
           </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">07</span>
@@ -515,7 +532,7 @@
       <article class="service-card" data-bar="dark">
         <div class="service-card-pin">
           <div class="service-card-bg has-photo" aria-hidden="true">
-            <img src="../assets/images/about/service-growth.webp" alt="" loading="lazy">
+            <img src="../assets/images/about/service-growth.webp" alt="" loading="lazy" decoding="async">
           </div>
           <div class="service-card-glow" aria-hidden="true"></div>
           <span class="service-card-bignum" aria-hidden="true">08</span>
@@ -552,24 +569,24 @@
 
       <div class="work-logos" aria-label="Other brands we've worked with">
         <div class="work-logos-grid">
-          <div class="work-logo-tile" style="--i:0"><img src="../assets/images/work/96min.jpeg" alt="90min" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:1"><img src="../assets/images/work/travelMaker.jpeg" alt="Travel Maker" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:2"><img src="../assets/images/work/homyy.jpeg" alt="Homy Nursery Club" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:3"><img src="../assets/images/work/Balsam.jpeg" alt="Balsam Medical Centre" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:4"><img src="../assets/images/work/Raked.jpeg" alt="Raked" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:5"><img src="../assets/images/work/alshaya.webp" alt="Alshaya" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:6"><img src="../assets/images/work/eduquest.jpeg" alt="EduQuest" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:7"><img src="../assets/images/work/elite.jpeg" alt="Elite" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:8"><img src="../assets/images/work/elysian.jpeg" alt="Elysian" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:9"><img src="../assets/images/work/harth.jpeg" alt="Harth" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:10"><img src="../assets/images/work/husan.webp" alt="Hisan Al-Taqniyat" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:11"><img src="../assets/images/work/khutaa.jpeg" alt="Khutaa" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:12"><img src="../assets/images/work/meccanno.jpeg" alt="Meccanno" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:13"><img src="../assets/images/work/nafes.webp" alt="Nafes" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:14"><img src="../assets/images/work/rholNajd.jpeg" alt="Rhol Najd" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:15"><img src="../assets/images/work/seventySeven.jpeg" alt="Seventy Seven" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:16"><img src="../assets/images/work/shahm.jpeg" alt="Shahm" loading="lazy"></div>
-          <div class="work-logo-tile" style="--i:17"><img src="../assets/images/work/skyjewel.jpeg" alt="Sky Jewel" loading="lazy"></div>
+          <div class="work-logo-tile" style="--i:0"><img src="../assets/images/work/96min.jpeg" alt="90min" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:1"><img src="../assets/images/work/travelMaker.jpeg" alt="Travel Maker" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:2"><img src="../assets/images/work/homyy.jpeg" alt="Homy Nursery Club" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:3"><img src="../assets/images/work/Balsam.jpeg" alt="Balsam Medical Centre" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:4"><img src="../assets/images/work/Raked.jpeg" alt="Raked" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:5"><img src="../assets/images/work/alshaya.webp" alt="Alshaya" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:6"><img src="../assets/images/work/eduquest.jpeg" alt="EduQuest" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:7"><img src="../assets/images/work/elite.jpeg" alt="Elite" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:8"><img src="../assets/images/work/elysian.jpeg" alt="Elysian" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:9"><img src="../assets/images/work/harth.jpeg" alt="Harth" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:10"><img src="../assets/images/work/husan.webp" alt="Hisan Al-Taqniyat" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:11"><img src="../assets/images/work/khutaa.jpeg" alt="Khutaa" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:12"><img src="../assets/images/work/meccanno.jpeg" alt="Meccanno" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:13"><img src="../assets/images/work/nafes.webp" alt="Nafes" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:14"><img src="../assets/images/work/rholNajd.jpeg" alt="Rhol Najd" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:15"><img src="../assets/images/work/seventySeven.jpeg" alt="Seventy Seven" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:16"><img src="../assets/images/work/shahm.jpeg" alt="Shahm" loading="lazy" decoding="async"></div>
+          <div class="work-logo-tile" style="--i:17"><img src="../assets/images/work/skyjewel.jpeg" alt="Sky Jewel" loading="lazy" decoding="async"></div>
         </div>
       </div>
     </div>
@@ -742,24 +759,24 @@
     <div class="partners-marquee" id="partnersMarquee">
       <p class="sr-only">Logos of our crew and partners: Meta, Google, Snapchat, HubSpot, Salla, Tabby, Tamara, Zid, and Falak.</p>
       <div class="partners-track" aria-hidden="true">
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/Meta.webp" alt="Meta" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/google.jpeg" alt="Google" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/Snapchat.webp" alt="Snapchat" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/hubSpot.webp" alt="HubSpot" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/salla.png" alt="Salla" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/tabby.webp" alt="Tabby" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/tamara.jpeg" alt="Tamara" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/zid.webp" alt="Zid" loading="lazy"></span>
-        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/falak.webp" alt="Falak" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/Meta.webp" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/google.jpeg" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/Snapchat.webp" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/hubSpot.webp" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/salla.png" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/tabby.webp" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/tamara.jpeg" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/zid.webp" alt="" loading="lazy"></span>
-        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/falak.webp" alt="" loading="lazy"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/Meta.webp" alt="Meta" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/google.jpeg" alt="Google" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/Snapchat.webp" alt="Snapchat" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/hubSpot.webp" alt="HubSpot" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/salla.png" alt="Salla" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/tabby.webp" alt="Tabby" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/tamara.jpeg" alt="Tamara" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/zid.webp" alt="Zid" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile"><img class="partner-logo-img" src="../assets/images/work/falak.webp" alt="Falak" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/Meta.webp" alt="" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/google.jpeg" alt="" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/Snapchat.webp" alt="" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/hubSpot.webp" alt="" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/salla.png" alt="" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/tabby.webp" alt="" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/tamara.jpeg" alt="" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/zid.webp" alt="" loading="lazy" decoding="async"></span>
+        <span class="partner-logo-tile" aria-hidden="true"><img class="partner-logo-img" src="../assets/images/work/falak.webp" alt="" loading="lazy" decoding="async"></span>
       </div>
     </div>
   </section>
@@ -847,7 +864,7 @@
         class="closing-photo"
         muted
         playsinline
-        preload="metadata"
+        preload="none"
         poster="../assets/images/footer/coffee-window-poster.webp"
         aria-label="A woman peeking through window blinds holding a cup of coffee"
       >
@@ -894,7 +911,9 @@
 
   <script>
     (function () {
-      var mobile = !!(window.matchMedia && window.matchMedia('(max-width: 768px)').matches);
+      // Phone clips only for a narrow AND portrait screen: a phone held sideways is
+      // wide, and the tall portrait clips would crop the subject right out of it.
+      var mobile = !!(window.matchMedia && window.matchMedia('(max-width: 768px) and (orientation: portrait)').matches);
       var videos = document.querySelectorAll('video[data-src-desktop]');
       for (var i = 0; i < videos.length; i++) {
         var v = videos[i];

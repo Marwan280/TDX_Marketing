@@ -124,7 +124,6 @@ export function initServicesStack() {
         if (warmed || !entries[0].isIntersecting) return;
         warmed = true;
         video.preload = 'auto';
-        video.load();
         // Prime decoding with a throwaway muted play/pause — iOS Safari
         // won't buffer a video that has never played, so without this the
         // first real play() had to fetch from cold and the tear started late.

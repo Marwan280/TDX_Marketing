@@ -51,6 +51,16 @@
    --color-ink (dark) rather than --color-text (light) specifically because
    this scene's backdrop — this white studio shoot, same as the old photo —
    was always meant to read as light, not the dark cityscape behind it. */
+/* The 640px floor above exists for short desktop windows; on a landscape
+   phone (~390px tall) it made the pin taller than the screen, cutting off
+   everything below the fold (coffee text, about text). Let it match the
+   real viewport there instead. */
+@media (max-height: 639px) {
+  .hero-pin {
+    min-height: 0;
+  }
+}
+
 .hero-coffee-media {
   position: absolute;
   inset: 0;
