@@ -2,19 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://example.com/</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://www.destexpert.com/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://example.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.destexpert.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.destexpert.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.destexpert.com/"/>
   </url>
   <url>
-    <loc>https://example.com/en/</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://www.destexpert.com/en/</loc>
+    <lastmod>2026-09-21</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="ar" href="https://example.com/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://example.com/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.destexpert.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.destexpert.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.destexpert.com/"/>
   </url>
 </urlset>
