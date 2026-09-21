@@ -107,8 +107,8 @@ export function initServicesStack() {
 
   // Tear-through-the-wall clip behind the heading: nothing is fetched until
   // the panel is within a screen of view (preload="none" + the device-
-  // specific <source> main.js injects), starts the moment the panel is
-  // (nearly) fully on screen, plays once, holds on its last frame (the hand
+  // specific <source> main.js injects), starts as soon as the panel is
+  // ~40% on screen (the heading is fully in by then), plays once, holds on its last frame (the hand
   // with the dessert), and rewinds once it's fully off-screen so it replays
   // next time. The clips themselves are pre-trimmed to begin right at the
   // tear, so there's no blank lead-in to sit through.
@@ -125,6 +125,20 @@ export function initServicesStack() {
         warmed = true;
         video.preload = 'auto';
         video.load();
+        // Prime decoding with a throwaway muted play/pause — iOS Safari
+        // won't buffer a video that has never played, so without this the
+        // first real play() had to fetch from cold and the tear started late.
+        var primed = video.play();
+        if (primed && typeof primed.then === 'function') {
+          primed
+            .then(function () {
+              if (!played) {
+                video.pause();
+                video.currentTime = 0;
+              }
+            })
+            .catch(function () {});
+        }
       },
       { rootMargin: '100% 0px 100% 0px' }
     ).observe(intro);
@@ -132,7 +146,7 @@ export function initServicesStack() {
     new IntersectionObserver(
       function (entries) {
         var entry = entries[entries.length - 1];
-        if (entry.intersectionRatio >= 0.8) {
+        if (entry.intersectionRatio >= 0.4) {
           if (!played) {
             played = true;
             video.currentTime = 0;
@@ -144,7 +158,7 @@ export function initServicesStack() {
           video.currentTime = 0;
         }
       },
-      { threshold: [0, 0.8] }
+      { threshold: [0, 0.4] }
     ).observe(intro);
   }
 

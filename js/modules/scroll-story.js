@@ -221,7 +221,9 @@ export function initScrollStory() {
   // itself there via the timeupdate listener below. Clicking .coffee-btn
   // then hands it off to native playback (see coffeeVideoReleased below)
   // so it carries on to the actual pour.
-  var COFFEE_VIDEO_TARGET_TIME = 8.5;
+  // 8.5s in the original clip, minus the 0.35s of empty studio trimmed off
+  // its start (the man now walks in within a quarter-second of frame 0).
+  var COFFEE_VIDEO_TARGET_TIME = 8.15;
   var coffeeVideoReleased = false;
   var coffeeVideoStarted = false;
 
@@ -240,6 +242,31 @@ export function initScrollStory() {
     if (!coffeeManVideo || reducedMotion || coffeeVideoStarted) return;
     coffeeVideoStarted = true;
     attemptAutoplay(coffeeManVideo);
+  }
+
+  // Buffers the clip well before it's needed (from the moment the logo has
+  // grown in, ~35vh before the fade even starts) instead of only when play()
+  // is first called — that cold start was the "have to wait for the man to
+  // appear" delay. The brief muted play()/pause() primes decoding too, since
+  // iOS Safari won't buffer a video that has never played, whatever its
+  // preload attribute says. Guarded so it can never pause the real playback.
+  var coffeeVideoWarmed = false;
+  function warmCoffeeVideo() {
+    if (!coffeeManVideo || reducedMotion || coffeeVideoWarmed) return;
+    coffeeVideoWarmed = true;
+    coffeeManVideo.preload = 'auto';
+    coffeeManVideo.load();
+    var primed = coffeeManVideo.play();
+    if (primed && typeof primed.then === 'function') {
+      primed
+        .then(function () {
+          if (!coffeeVideoStarted) {
+            coffeeManVideo.pause();
+            coffeeManVideo.currentTime = 0;
+          }
+        })
+        .catch(function () {});
+    }
   }
 
   if (coffeeBtn) {
@@ -470,10 +497,13 @@ export function initScrollStory() {
       // .hero-coffee-overlay in hero.css.
       if (heroCoffeeOverlay) heroCoffeeOverlay.style.opacity = String(tdxOpacity);
 
-      // The logo has fully faded out once scrolled reaches TDX_FADE_END —
+      // The coffee clip starts the instant the logo begins to fade (its
+      // overlay fades in lockstep, so the man is already walking in as the
+      // scene is revealed, not starting from scratch after it) —
       // startCoffeeVideo()'s own coffeeVideoStarted guard makes this a
       // one-shot trigger, not a re-check every tick past that point.
-      if (scrolled >= TDX_FADE_END) startCoffeeVideo();
+      if (scrolled >= LOGO_END) warmCoffeeVideo();
+      if (scrolled >= TDX_FADE_START) startCoffeeVideo();
 
       // Image's own bottom edge in real viewport px. Read directly off
       // heroMedia's own live layout (set just above, same tick) instead of
