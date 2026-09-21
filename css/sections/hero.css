@@ -6,8 +6,8 @@
    mobile address bar never auto-hides/shows mid-scroll and resizes vh out
    from under this — that's what used to throw the TDX logo's color-reveal
    (a fraction of this same height, see updateHeroVideo/update() in
-   scroll-story.js) out of sync with the video on phones. 1130vh stays as a
-   pre-JS fallback (280+230+200+200+220 — HERO_SCROLL_VH cut from 325 to 280
+   scroll-story.js) out of sync with the video on phones. 1070vh stays as a
+   pre-JS fallback (280+230+140+200+220 — WIPE_SCROLL_VH cut from 200 to 140, HERO_SCROLL_VH cut from 325 to 280
    to shrink a dead scroll gap with no visual feedback, STORY_SCROLL_VH cut
    from 320 to 230 to stop the about-text phase dragging on relative to the
    rest of the pin); --vh100 (set by stable-viewport.js from the same frozen
@@ -17,8 +17,8 @@
 .hero {
   position: relative;
   width: 100%;
-  height: 1130vh;
-  height: calc(var(--vh100, 1vh) * 1130);
+  height: 1070vh;
+  height: calc(var(--vh100, 1vh) * 1070);
 }
 
 .hero-pin {
@@ -611,4 +611,13 @@
 
 [dir="ltr"] .trust-panel::before {
   transform: none;
+}
+
+/* Dedicated portrait version for phones — same subject placement (right
+   side), so the mirroring rules above still apply unchanged. Overriding
+   only background-image means a phone never even requests the desktop JPG. */
+@media (max-width: 768px) {
+  .trust-panel::before {
+    background-image: url('../../assets/images/hero/trust-bg-phone.webp');
+  }
 }

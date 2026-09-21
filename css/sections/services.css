@@ -17,18 +17,37 @@
   background: var(--color-surface);
 }
 
+/* The tear-through-the-wall video (see initIntroVideo in services-stack.js)
+   fills the whole panel; its hole + hand sit in the lower half, so the
+   heading is pinned to the empty upper area instead of vertically centered
+   (which would land it right on top of the dessert). */
 .services-intro {
+  position: relative;
+  overflow: hidden;
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
-  padding: 0 24px;
+  padding: clamp(100px, 19vh, 230px) 24px 0;
+}
+
+.services-intro-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 65%;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .services-mask {
+  position: relative;
+  z-index: 1;
   overflow: hidden;
 }
 

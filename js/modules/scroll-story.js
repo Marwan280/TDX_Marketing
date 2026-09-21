@@ -153,7 +153,13 @@ export function initScrollStory() {
   // stagger) are fractions of this number, so they all speed up together,
   // proportionally — nothing about their relative timing changed.
   var STORY_SCROLL_VH = 230;
-  var WIPE_SCROLL_VH = 200;
+  // Was 200 with the curtain spread across all of it — the slowest-feeling
+  // transition on the page. Curtain now finishes in its first 40% (see
+  // updateWipe), so the phase itself can be much shorter.
+  var WIPE_SCROLL_VH = 140;
+  // Fraction of the wipe phase the process curtain takes to finish sweeping in
+  // (after that the office/about scene is fully covered — see gateVideos()).
+  var WIPE_CURTAIN_END = 0.4;
   var VALUES_SCROLL_VH = 200;
   var TRUST_SCROLL_VH = 220;
   var TOTAL_SCROLL_VH = HERO_SCROLL_VH + STORY_SCROLL_VH + WIPE_SCROLL_VH + VALUES_SCROLL_VH + TRUST_SCROLL_VH;
@@ -316,11 +322,30 @@ export function initScrollStory() {
     );
   }
 
-  // Office video: plays on its own (autoplay + loop), independent of
-  // scroll — same treatment as the hero video now.
-  function initOfficeVideo() {
-    if (!officeVideo || reducedMotion) return;
-    attemptAutoplay(officeVideo);
+  // Videos only run while they can actually be seen. The hero clip (1600px,
+  // 26s loop) used to keep decoding for the entire rest of the page after it
+  // had been lifted off screen, and the office clip started at page load
+  // even though it's ~800vh of scrolling away — both pure wasted CPU/battery
+  // (and on phones, wasted bandwidth) for something nobody could see.
+  // Hero: plays until its curtain has fully lifted away (SHRINK_END).
+  // Office: plays from just before the about zoom begins until the process
+  // curtain has fully covered it. Both resume/pause as you scroll back and forth.
+  var heroVideoOn = true;
+  var officeVideoOn = false;
+  function gateVideos(scrolled) {
+    if (reducedMotion) return;
+    var heroWanted = scrolled < SHRINK_END;
+    if (heroVideo && heroWanted !== heroVideoOn) {
+      heroVideoOn = heroWanted;
+      if (heroWanted) attemptAutoplay(heroVideo);
+      else heroVideo.pause();
+    }
+    var officeWanted = scrolled >= 0.85 && getWipeProgress() < WIPE_CURTAIN_END;
+    if (officeVideo && officeWanted !== officeVideoOn) {
+      officeVideoOn = officeWanted;
+      if (officeWanted) attemptAutoplay(officeVideo);
+      else officeVideo.pause();
+    }
   }
 
   function updateStory() {
@@ -389,6 +414,7 @@ export function initScrollStory() {
 
   function update() {
     var scrolled = getProgress();
+    gateVideos(scrolled);
 
     if (siteHeader) {
       // Header is invisible on the hero itself, fading in (with the blurred
@@ -513,7 +539,13 @@ export function initScrollStory() {
     // Wipe starts only once the story phase (about text) is fully done — same
     // pin, so there's no scroll-past gap and nothing gets covered mid-reveal.
     var wipeP = getWipeProgress();
-    var reveal = easeInOut(wipeP);
+    // The curtain sweeps across in the first WIPE_CURTAIN_END of the phase
+    // (~56vh, same ballpark as the values/trust curtains) instead of being
+    // stretched across the whole phase — that stretch was the slow, "still
+    // hasn't moved" feel. Ease-OUT (not in-out) so it starts moving on the
+    // very first bit of scroll instead of sitting still through an ease-in.
+    var curtainT = clamp01(wipeP / WIPE_CURTAIN_END);
+    var reveal = curtainT * (2 - curtainT);
     wipePanel.style.setProperty('--reveal', reveal * 100 + '%');
 
     // Cards live inside the same wipe panel as the heading, so everything
@@ -541,8 +573,12 @@ export function initScrollStory() {
         }
       } else {
         cardsFinalized = false;
-        var CARDS_START = 0.3;
-        var cardsLocal = clamp01((wipeP - CARDS_START) / (1 - CARDS_START));
+        // Cards start while the curtain is still finishing and are all in
+        // by CARDS_END, leaving a short hold at the end of the phase to read
+        // them before the values panel starts sweeping in.
+        var CARDS_START = 0.2;
+        var CARDS_END = 0.85;
+        var cardsLocal = clamp01((wipeP - CARDS_START) / (CARDS_END - CARDS_START));
         var cardsStep = 0.7 / cardsCount;
         var dir = isRTL ? -1 : 1;
         wipeCards.forEach(function (card, i) {
@@ -776,7 +812,6 @@ export function initScrollStory() {
   // Only wires up the pause-at-target-time listener — actually starting
   // playback is scroll-triggered, see startCoffeeVideo() in update().
   window.addEventListener('load', initCoffeeVideo);
-  window.addEventListener('load', initOfficeVideo);
 
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(init);

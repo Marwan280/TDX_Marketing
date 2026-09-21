@@ -1,6 +1,7 @@
 import { clamp01, easeInOut } from '../utils/easing.js';
 import { createStableViewport } from '../utils/stable-viewport.js';
 import { getScrollRoot } from '../utils/scroll-root.js';
+import { attemptAutoplay } from '../utils/autoplay.js';
 
 /**
  * Section 7 (services): an independent "stacking cards" sequence, separate
@@ -46,14 +47,17 @@ export function initServicesStack() {
     if (!intro) return;
     var vh = viewport.height;
     var rect = intro.getBoundingClientRect();
-    // Same "arrival" shape as the cards below: 0 while still off-screen,
-    // ramping to 1 as its center crosses into view — the panel itself is
-    // exactly one viewport tall, so there's no internal scroll room to
-    // measure a hold/progress fraction from, only its entrance.
-    var t = clamp01(1 - (rect.top + rect.height / 2) / vh);
-    var headingT = easeInOut(clamp01(t / 0.7));
+    // Measured off the panel's TOP edge (0 as it peeks in, 1 once it has
+    // fully arrived) and finished early: the heading is completely in by
+    // the time the panel is ~40% on screen and the subheading right behind
+    // it, so both are already sitting there, readable, while the user is
+    // still scrolling in — before the tear video (which waits for the whole
+    // panel) starts. It used to measure to the panel's CENTER, which only
+    // reached 1 once the panel had scrolled half-way back OUT again.
+    var t = clamp01(1 - rect.top / vh);
+    var headingT = easeInOut(clamp01(t / 0.4));
     if (introHeading) introHeading.style.transform = 'translateY(' + (1 - headingT) * 100 + '%)';
-    var subT = easeInOut(clamp01((t - 0.2) / 0.7));
+    var subT = easeInOut(clamp01((t - 0.05) / 0.4));
     if (introSubheading) introSubheading.style.transform = 'translateY(' + (1 - subT) * 100 + '%)';
   }
 
@@ -100,6 +104,51 @@ export function initServicesStack() {
     updateIntro();
     updateCards();
   }
+
+  // Tear-through-the-wall clip behind the heading: nothing is fetched until
+  // the panel is within a screen of view (preload="none" + the device-
+  // specific <source> main.js injects), starts the moment the panel is
+  // (nearly) fully on screen, plays once, holds on its last frame (the hand
+  // with the dessert), and rewinds once it's fully off-screen so it replays
+  // next time. The clips themselves are pre-trimmed to begin right at the
+  // tear, so there's no blank lead-in to sit through.
+  function initIntroVideo() {
+    var video = document.getElementById('servicesIntroVideo');
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!video || !intro || reduced || !('IntersectionObserver' in window)) return;
+
+    var warmed = false;
+    var played = false;
+    new IntersectionObserver(
+      function (entries) {
+        if (warmed || !entries[0].isIntersecting) return;
+        warmed = true;
+        video.preload = 'auto';
+        video.load();
+      },
+      { rootMargin: '100% 0px 100% 0px' }
+    ).observe(intro);
+
+    new IntersectionObserver(
+      function (entries) {
+        var entry = entries[entries.length - 1];
+        if (entry.intersectionRatio >= 0.8) {
+          if (!played) {
+            played = true;
+            video.currentTime = 0;
+            attemptAutoplay(video);
+          }
+        } else if (!entry.isIntersecting) {
+          played = false;
+          video.pause();
+          video.currentTime = 0;
+        }
+      },
+      { threshold: [0, 0.8] }
+    ).observe(intro);
+  }
+
+  initIntroVideo();
 
   var ticking = false;
   function onScroll() {
