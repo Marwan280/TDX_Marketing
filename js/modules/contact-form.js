@@ -4,7 +4,7 @@
 // someone SUBMIT to the one address they were created for. Until a key is
 // set the form falls back to opening the visitor's mail app with the same
 // details pre-filled, so it is never a dead end.
-var WEB3FORMS_ACCESS_KEY = '';
+var WEB3FORMS_ACCESS_KEY = 'cf5ec36b-a54b-401e-bbf3-7c8638628d53';
 var TO_EMAIL = 'media@destexpert.com';
 var ENDPOINT = 'https://api.web3forms.com/submit';
 
