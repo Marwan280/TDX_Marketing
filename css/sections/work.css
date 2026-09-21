@@ -549,3 +549,121 @@
     font-size: 11.5px;
   }
 }
+
+/* ---------------------------------------------------------------------
+   Phones / small tablets: pinned case-study layout, rebuilt.
+   The old version absolutely positioned each slide inside a fixed-height
+   box and dragged the logo cluster up into it with a hard-coded negative
+   margin — that only lined up for one particular text length + screen
+   height, so on other phones (shorter screens, longer English copy) the
+   logos landed on top of the stats and the text ran under the header or
+   off the bottom. Now:
+   - slides are stacked in one grid cell, so the box is exactly as tall as
+     the tallest case study, and text simply flows (client, title, beats,
+     stats) with no absolute offsets;
+   - the logo cluster lives in its own reserved top corner, and the title +
+     first beat are pushed clear of it;
+   - work-stories.js scales the whole block down (--work-fit) whenever it
+     is still taller than the screen, so it always fits, whatever the
+     language or device.
+   --------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .work-pin {
+    align-items: flex-start;
+    box-sizing: border-box;
+    padding-top: 68px;
+  }
+
+  .work-pin-row {
+    --mk: clamp(88px, 12vw, 130px);
+    display: block;
+    flex: none;
+    max-width: none;
+    /* auto block margins centre it when there is spare height (tall tablets)
+       and collapse to top-aligned when it is already full-height (phones). */
+    margin-block: auto;
+    transform-origin: top center;
+    transform: scale(var(--work-fit, 1));
+    width: calc(100% / var(--work-fit, 1));
+    margin-inline: calc((1 - 1 / var(--work-fit, 1)) * 50%);
+  }
+
+  .work-slides {
+    display: grid;
+    width: 100%;
+    max-width: 100%;
+    min-height: 0;
+  }
+
+  .work-slide {
+    position: relative;
+    inset: auto;
+    grid-area: 1 / 1;
+    padding-top: 0;
+  }
+
+  .work-slide-client {
+    position: static;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .work-card-title {
+    padding-inline-end: calc(var(--mk) + 14px);
+  }
+
+  .work-beats {
+    margin-top: max(22px, calc(var(--mk) - 60px));
+  }
+
+  .work-marks {
+    position: absolute;
+    top: 0;
+    inset-inline-end: 24px;
+    order: 0;
+    align-self: auto;
+    width: var(--mk);
+    height: var(--mk);
+    margin: 0;
+    z-index: 2;
+  }
+}
+
+/* Landscape phones: two columns (text | logos) instead of stacking — far
+   fewer wrapped lines, so it fits the very short screen. */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 600px) {
+  .work-pin {
+    padding-top: 60px;
+  }
+
+  .work-pin-row {
+    --mk: clamp(110px, 32vh, 160px);
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  .work-slides {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+  }
+
+  .work-card-title {
+    padding-inline-end: 0;
+  }
+
+  .work-beats {
+    margin-top: 12px;
+  }
+
+  .work-marks {
+    position: relative;
+    inset-inline-end: auto;
+    order: 2;
+    flex: 0 0 auto;
+    align-self: center;
+    margin-inline-end: 12px;
+  }
+}

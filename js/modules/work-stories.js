@@ -130,6 +130,23 @@ export function initWorkStories() {
     updatePin();
   }
 
+  // Phones/small tablets: scale the whole case-study block down whenever it
+  // would still be taller than the screen (see the max-width: 900px block at
+  // the end of work.css). Measured from the row's own layout height (a CSS
+  // transform never changes offsetHeight), so it is exact for every language
+  // and device; capped at 0.68 so text never gets unreadably small.
+  var fitPin = document.querySelector('.work-pin');
+  var fitRow = fitPin ? fitPin.querySelector('.work-pin-row') : null;
+  function fitWorkRow() {
+    if (!fitPin || !fitRow) return;
+    fitRow.style.setProperty('--work-fit', '1');
+    if (!window.matchMedia('(max-width: 900px)').matches) return;
+    var avail = fitPin.clientHeight - parseFloat(getComputedStyle(fitPin).paddingTop) - 14;
+    var natural = fitRow.offsetHeight;
+    var k = natural > avail ? Math.max(0.68, avail / natural) : 1;
+    fitRow.style.setProperty('--work-fit', String(k));
+  }
+
   var ticking = false;
   function onScroll() {
     if (!ticking) {
@@ -150,8 +167,15 @@ export function initWorkStories() {
 
   getScrollRoot().addEventListener('scroll', onScroll, { passive: true });
   getScrollRoot().addEventListener('touchmove', onScroll, { passive: true });
-  window.addEventListener('resize', update);
-  window.addEventListener('load', update);
+  window.addEventListener('resize', function () {
+    fitWorkRow();
+    update();
+  });
+  window.addEventListener('load', function () {
+    fitWorkRow();
+    update();
+  });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitWorkRow);
 
   // Client logo wall: a plain scroll-into-view reveal, not tied to the
   // pinned timeline above — each tile's own --i (set inline in the HTML)
@@ -170,5 +194,6 @@ export function initWorkStories() {
   } else if (logoWall) {
     logoWall.classList.add('is-visible');
   }
+  fitWorkRow();
   update();
 }
